@@ -1,0 +1,16 @@
+body{
+  overflow-x: hidden;
+}
+
+a,
+button {
+  color: inherit;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+ul,
+li {
+  padding: 0;
+}

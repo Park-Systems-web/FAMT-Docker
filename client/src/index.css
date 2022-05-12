@@ -1,0 +1,63 @@
+*{
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+div::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: 0.4em;
+  height: 0.4em;
+}
+
+div::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.17);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.17);
+}
+
+div::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.26);
+  /* outline: 1px solid #00000024; */
+}
+
+button {
+  border-style: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* #root {
+  background-color: #e7e8e9;
+} */
+
+/*모달은 root 밑에가 아닌 portal 형태로 다르게 열려서 여기에 css를 지정해줘야함*/
+
+/*모달 라벨*/
+.css-o943dk-MuiFormLabel-root-MuiInputLabel-root {
+  font-size: 16px !important;
+}
+
+/*모달 인풋*/
+.css-10botns-MuiInputBase-input-MuiFilledInput-input {
+  font-size: 20px !important;
+}
+
+/*모달 버튼*/
+.css-kpm0tx-MuiButtonBase-root-MuiButton-root {
+  font-size: 16px !important;
+}
