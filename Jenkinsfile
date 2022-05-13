@@ -13,6 +13,10 @@ pipeline {
                     dir('client'){
                         sh '''
                         ls -al
+                        sudo docker build -f Dockerfile -t client .
+                        sudo docker container stop client
+                        sudo docker container rm client
+                        sudo docker run --name client -d -p 81:80 client
                         '''
                 }
             }
@@ -22,8 +26,16 @@ pipeline {
                     dir('server'){
                      sh '''
                      ls -al
+                     
                      '''
                     }
+            }
+        }
+        stage('cleanup') {
+            steps {
+              sh '''
+              sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+              '''
             }
         }
 
