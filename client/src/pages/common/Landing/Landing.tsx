@@ -14,9 +14,7 @@ import axios from "axios";
 import SpeakerCard from "components/SpeakerCard/SpeakerCard";
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import YoutubeEmbed from "components/YoutubeEmbed/YoutubeEmbed";
-import BackgroundVectorWhite from "components/BackgroundVector/BackgroundVectorWhite";
-import BackgroundVectorColored from "components/BackgroundVector/BackgroundVectorColored";
-import BackgroundVectorColoredReversed from "components/BackgroundVector/BackgroundVectorColoredReversed";
+
 // import { LiveChatWidget } from "@livechat/widget-react";
 import {
   subHeadingFontSize,
@@ -100,134 +98,131 @@ const Landing = () => {
         background={landingSection1BackgroundURL}
         className="section1"
       >
-        <BackgroundVectorWhite maxWidth="1920px">
-          <div className="overlay secondary z0" />
+        <div className="overlay secondary z0" />
+        <Stack
+          className="layout"
+          direction="column"
+          alignItems="center"
+          spacing={5}
+          sx={{ padding: { laptop: "135px 50px !important" } }}
+        >
+          <img
+            className="z1"
+            src={landingSection1LogoURL}
+            alt="logo"
+            style={{
+              maxWidth: "600px",
+              height: "300px",
+              width: "100%",
+              minWidth: "200px",
+            }}
+          />
           <Stack
-            className="layout"
-            direction="column"
+            sx={{
+              flexDirection: {
+                mobile: "column",
+                laptop: "row",
+              },
+              backgroundColor: theme.palette.common.white,
+              padding: "0 10px",
+            }}
+            style={{ marginTop: 0 }}
             alignItems="center"
-            spacing={5}
-            sx={{ padding: { laptop: "135px 50px !important" } }}
           >
-            <img
-              className="z1"
-              src={landingSection1LogoURL}
-              alt="logo"
-              style={{
-                maxWidth: "600px",
-                height: "300px",
-                width: "100%",
-                minWidth: "200px",
-              }}
-            />
-            <Stack
-              sx={{
-                flexDirection: {
-                  mobile: "column",
-                  laptop: "row",
-                },
-                backgroundColor: theme.palette.common.white,
-                padding: "0 10px",
-              }}
-              style={{ marginTop: 0 }}
-              alignItems="center"
-            >
-              {eventLocation !== undefined && (
-                <>
-                  <Typography
-                    fontSize={headingFontSize}
-                    fontWeight={700}
-                    color={theme.palette.primary.navy}
-                  >
-                    {eventLocation}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      display: { mobile: "none", laptop: "inline-block" },
-                      margin: "0 8px",
-                    }}
-                    fontWeight={700}
-                    fontSize={subHeadingFontSize}
-                    color={theme.palette.primary.navy}
-                  >
-                    |
-                  </Typography>
-                </>
-              )}
-              <Typography
-                fontSize={headingFontSize}
-                fontWeight={700}
-                color={theme.palette.primary.navy}
-              >
-                {fullDate}
-              </Typography>
-            </Stack>
-            {registration && (
-              <NSSButton
-                className="z1"
-                variant="gradient"
-                style={{ padding: "5px 20px" }}
-                fontSize={mainFontSize}
-                fontWeight={theme.typography.fontWeightBold}
-                letterSpacing="1.2px"
-                onClick={() => {
-                  navigate(`/${pathname}/registration`);
-                }}
-              >
-                {registration}
-              </NSSButton>
+            {eventLocation !== undefined && (
+              <>
+                <Typography
+                  fontSize={headingFontSize}
+                  fontWeight={700}
+                  color={theme.palette.primary.darkText}
+                >
+                  {eventLocation}
+                </Typography>
+                <Typography
+                  sx={{
+                    display: { mobile: "none", laptop: "inline-block" },
+                    margin: "0 8px",
+                  }}
+                  fontWeight={700}
+                  fontSize={subHeadingFontSize}
+                  color={theme.palette.primary.darkText}
+                >
+                  |
+                </Typography>
+              </>
             )}
             <Typography
-              className="z1"
-              textAlign="center"
-              color={theme.palette.common.white}
-              fontWeight={theme.typography.fontWeightMedium}
-              fontSize={subHeadingFontSize}
+              fontSize={headingFontSize}
+              fontWeight={700}
+              color={theme.palette.primary.darkText}
             >
-              {landingSection1Desc && <InnerHTML html={landingSection1Desc} />}
+              {fullDate}
             </Typography>
           </Stack>
-        </BackgroundVectorWhite>
-      </LandingSection>
-      <BackgroundVectorColored maxWidth="1920px">
-        {showLandingSection2 && (
-          <LandingSection fullWidth>
-            <Stack
-              className="layout"
-              flexDirection={{
-                mobile: "column-reverse",
-                tablet: "row",
+          {registration && (
+            <NSSButton
+              className="z1"
+              variant="gradient"
+              style={{ padding: "5px 20px" }}
+              fontSize={mainFontSize}
+              fontWeight={theme.typography.fontWeightBold}
+              letterSpacing="1.2px"
+              onClick={() => {
+                navigate(`/${pathname}/registration`);
               }}
-              maxWidth="1920px"
-              alignItems="center"
-              justifyContent="space-between"
-              spacing={{ mobile: 5, tablet: 0 }}
             >
-              <Stack
-                flexDirection="column"
-                width="100%"
-                height="100%"
-                sx={{
-                  mr: {
-                    mobile: 0,
-                    tablet: 5,
-                  },
-                }}
-                // width={{
-                //   tablet: "55%",
-                //   mobile: "100%",
-                // }}
-                // height={{
-                //   tablet: "100%",
-                //   mobile: "55%",
-                // }}
-              >
-                <LandingTitle title={landingSection2Title || ""} />
-                <Box fontSize={mainFontSize}>
-                  <InnerHTML html={landingSection2Desc || ""} />
-                </Box>
-              </Stack>
-              {/* {landingSection2Video && (
+              {registration}
+            </NSSButton>
+          )}
+          <Typography
+            className="z1"
+            textAlign="center"
+            color={theme.palette.common.white}
+            fontWeight={theme.typography.fontWeightMedium}
+            fontSize={headingFontSize}
+          >
+            {landingSection1Desc && <InnerHTML html={landingSection1Desc} />}
+          </Typography>
+        </Stack>
+      </LandingSection>
+      {showLandingSection2 && (
+        <LandingSection fullWidth>
+          <Stack
+            className="layout"
+            flexDirection={{
+              mobile: "column-reverse",
+              tablet: "row",
+            }}
+            maxWidth="1920px"
+            alignItems="center"
+            justifyContent="space-between"
+            spacing={{ mobile: 5, tablet: 0 }}
+          >
+            <Stack
+              flexDirection="column"
+              width="100%"
+              height="100%"
+              sx={{
+                mr: {
+                  mobile: 0,
+                  tablet: 5,
+                },
+              }}
+              // width={{
+              //   tablet: "55%",
+              //   mobile: "100%",
+              // }}
+              // height={{
+              //   tablet: "100%",
+              //   mobile: "55%",
+              // }}
+            >
+              <LandingTitle title={landingSection2Title || ""} />
+              <Box fontSize={mainFontSize}>
+                <InnerHTML html={landingSection2Desc || ""} />
+              </Box>
+            </Stack>
+            {/* {landingSection2Video && (
                 <Stack
                   sx={{
                     display: "flex",
@@ -258,267 +253,180 @@ const Landing = () => {
                   </Box>
                 </Stack>
               )} */}
-            </Stack>
-          </LandingSection>
-        )}
-        {showLandingSection3 && (
-          <LandingSection fullWidth maxWidth="1920px">
-            <Box className="layout">
-              {landingSection3Title && (
-                <LandingTitle title={landingSection3Title} />
-              )}
-              {landingSection3Desc && (
-                <Typography fontSize={mainFontSize}>
-                  <InnerHTML html={landingSection3Desc} />
+          </Stack>
+        </LandingSection>
+      )}
+      {showLandingSection3 && (
+        <LandingSection fullWidth maxWidth="1920px">
+          <Box className="layout">
+            {landingSection3Title && (
+              <LandingTitle title={landingSection3Title} />
+            )}
+            {landingSection3Desc && (
+              <Typography fontSize={mainFontSize}>
+                <InnerHTML html={landingSection3Desc} />
+              </Typography>
+            )}
+          </Box>
+        </LandingSection>
+      )}
+      {showLandingSection4 && (
+        <LandingSection fullWidth maxWidth="1920px">
+          <Stack className="layout" direction="column">
+            {landingSection4Title && (
+              <LandingTitle title={landingSection4Title} textAlign="left" />
+            )}
+            <Stack
+              direction={{ mobile: "column", laptop: "row" }}
+              flexWrap="wrap"
+              justifyContent="space-between"
+              sx={{
+                color: theme.palette.common.white,
+              }}
+            >
+              <Box
+                className="gradient-box"
+                sx={{
+                  width: { laptop: "25%" },
+                  p: 3,
+                  mb: { mobile: 5, laptop: 0 },
+                }}
+              >
+                <Typography
+                  fontSize={subHeadingFontSize}
+                  fontWeight={theme.typography.fontWeightBold}
+                >
+                  {landingSection4List1Title}
                 </Typography>
-              )}
-            </Box>
-          </LandingSection>
-        )}
-        {showLandingSection4 && (
-          <LandingSection fullWidth maxWidth="1920px">
-            <Stack className="layout" direction="column">
-              {landingSection4Title && (
-                <LandingTitle title={landingSection4Title} textAlign="left" />
-              )}
-              <Stack
-                direction={{ mobile: "column", laptop: "row" }}
-                flexWrap="wrap"
-                justifyContent="space-between"
-                sx={{
-                  color: theme.palette.common.white,
-                }}
-              >
-                <Box
-                  className="gradient-box"
-                  sx={{
-                    width: { laptop: "25%" },
-                    p: 3,
-                    mb: { mobile: 5, laptop: 0 },
-                  }}
-                >
-                  <Typography
-                    fontSize={subHeadingFontSize}
-                    fontWeight={theme.typography.fontWeightBold}
-                  >
-                    {landingSection4List1Title}
-                  </Typography>
-                  <ul style={{ marginInlineStart: "35px" }}>
-                    {landingSection4List1?.map((item) => (
-                      <li style={{ marginBottom: "15px" }}>
-                        <Typography
-                          fontWeight={theme.typography.fontWeightMedium}
-                          fontSize={smallFontSize}
-                        >
-                          {item}
-                        </Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </Box>
-                <Box
-                  className="gradient-box"
-                  sx={{
-                    width: { laptop: "25%" },
-                    p: 3,
-                    mb: { mobile: 5, laptop: 0 },
-                  }}
-                >
-                  <Typography
-                    fontSize={subHeadingFontSize}
-                    fontWeight={theme.typography.fontWeightBold}
-                  >
-                    {landingSection4List2Title}
-                  </Typography>
-                  <ul style={{ marginInlineStart: "35px" }}>
-                    {landingSection4List2?.map((item) => (
-                      <li style={{ marginBottom: "15px" }}>
-                        <Typography
-                          fontWeight={theme.typography.fontWeightMedium}
-                          fontSize={smallFontSize}
-                        >
-                          {item}
-                        </Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </Box>
-                <Box
-                  className="gradient-box"
-                  sx={{
-                    width: { laptop: "25%" },
-                    p: 3,
-                  }}
-                >
-                  <Typography
-                    fontSize={subHeadingFontSize}
-                    fontWeight={theme.typography.fontWeightBold}
-                  >
-                    {landingSection4List3Title}
-                  </Typography>
-                  <ul style={{ marginInlineStart: "35px" }}>
-                    {landingSection4List3?.map((item) => (
-                      <li style={{ marginBottom: "15px" }}>
-                        <Typography
-                          fontSize={smallFontSize}
-                          fontWeight={theme.typography.fontWeightMedium}
-                        >
-                          <InnerHTML html={item} />
-                        </Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </Box>
-              </Stack>
-            </Stack>
-          </LandingSection>
-        )}
-        {/* </BackgroundVectorColored> */}
-
-        {/* <BackgroundVectorColoredReversed maxWidth="1920px"> */}
-        {/* section5 */}
-        {showLandingSection5 && (
-          <LandingSection fullWidth maxWidth="1920px">
-            <SpeakersContainer className="layout">
-              <Stack direction="column">
-                {landingSection5Title && (
-                  <LandingTitle
-                    title={landingSection5Title}
-                    textAlign="right"
-                  />
-                )}
-                <Stack direction="row" flexWrap="wrap">
-                  {keynoteSpeakers.map((speaker) => (
-                    <SpeakerCard key={speaker.id} speaker={speaker} />
+                <ul style={{ marginInlineStart: "35px" }}>
+                  {landingSection4List1?.map((item) => (
+                    <li style={{ marginBottom: "15px" }}>
+                      <Typography
+                        fontWeight={theme.typography.fontWeightMedium}
+                        fontSize={smallFontSize}
+                      >
+                        {item}
+                      </Typography>
+                    </li>
                   ))}
-                </Stack>
-              </Stack>
-            </SpeakersContainer>
-          </LandingSection>
-        )}
-        {/* section6 */}
-        {showLandingSection6 && (
-          <LandingSection fullWidth maxWidth="1920px">
-            <Stack className="layout">
-              <LandingTitle
-                title={
-                  landingSection6Title ||
-                  "The times of the NanoScientific Symposium past journey"
-                }
-              />
-              {landingSection6ButtonText && landingSection6ButtonLink && (
-                <Stack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{
-                    margin: "-15px 0 20px 0",
-                    flexDirection: {
-                      laptop: "row",
-                    },
-                  }}
-                >
-                  <Box sx={{ width: { laptop: "50%" } }}>
-                    <Typography
-                      fontSize={mainFontSize}
-                      fontWeight={theme.typography.fontWeightMedium}
-                    >
-                      {landingSection6Desc ||
-                        "We are enormously grateful and say thank you to the +4,600 attendees at the last NanoScientific Symposium. Explore all on-demand that will inspire and expand your knowledge."}
-                    </Typography>
-                  </Box>
-
-                  <Box
-                    sx={{ m: "15px", width: { mobile: "70%", laptop: "30%" } }}
-                  >
-                    <NSSButton
-                      variant="gradient"
-                      style={{ margin: "0 auto" }}
-                      onClick={() => {
-                        openLink(landingSection6ButtonLink);
-                      }}
-                      fontSize={smallFontSize}
-                      fontWeight={theme.typography.fontWeightBold}
-                    >
-                      {landingSection6ButtonText}
-                    </NSSButton>
-                  </Box>
-                </Stack>
-              )}
-              <Stack
+                </ul>
+              </Box>
+              <Box
+                className="gradient-box"
                 sx={{
-                  flexDirection: {
-                    mobile: "column",
-                    laptop: "row",
-                  },
+                  width: { laptop: "25%" },
+                  p: 3,
+                  mb: { mobile: 5, laptop: 0 },
                 }}
-                justifyContent="space-between"
-                flexWrap="wrap"
               >
-                {/* {landingSection6Videos?.map((video) => (
-                <Box
-                  key={video}
-                  sx={{
-                    backgroundColor: "#fff",
-                    width: {
-                      mobile: "100%",
-                      laptop: "46%",
-                    },
-                    mb: {
-                      mobile: 2,
-                      laptop: 0,
-                    },
-                    position: "relative",
-                  }}
+                <Typography
+                  fontSize={subHeadingFontSize}
+                  fontWeight={theme.typography.fontWeightBold}
                 >
-                  <YoutubeEmbed embedId={video} height="250" />
-                </Box>
-              ))} */}
-              </Stack>
+                  {landingSection4List2Title}
+                </Typography>
+                <ul style={{ marginInlineStart: "35px" }}>
+                  {landingSection4List2?.map((item) => (
+                    <li style={{ marginBottom: "15px" }}>
+                      <Typography
+                        fontWeight={theme.typography.fontWeightMedium}
+                        fontSize={smallFontSize}
+                      >
+                        {item}
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
+              <Box
+                className="gradient-box"
+                sx={{
+                  width: { laptop: "25%" },
+                  p: 3,
+                }}
+              >
+                <Typography
+                  fontSize={subHeadingFontSize}
+                  fontWeight={theme.typography.fontWeightBold}
+                >
+                  {landingSection4List3Title}
+                </Typography>
+                <ul style={{ marginInlineStart: "35px" }}>
+                  {landingSection4List3?.map((item) => (
+                    <li style={{ marginBottom: "15px" }}>
+                      <Typography
+                        fontSize={smallFontSize}
+                        fontWeight={theme.typography.fontWeightMedium}
+                      >
+                        <InnerHTML html={item} />
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
             </Stack>
-          </LandingSection>
-        )}
-        {/* </BackgroundVectorColoredReversed> */}
+          </Stack>
+        </LandingSection>
+      )}
+      {/* </BackgroundVectorColored> */}
 
-        {showLandingSection7 && landingSection7Sponsors && (
-          <LandingSection fullWidth maxWidth="1920px">
-            <Stack className="layout">
-              <LandingTitle title={landingSection7Title || "Sponsored By"} />
-              <Stack
-                flexWrap="wrap"
-                alignItems="center"
-                sx={{
-                  flexDirection: {
-                    mobile: "column",
-                    tablet: "row",
-                  },
-                }}
-              >
-                {landingSection7Sponsors.map((sponsor) => (
-                  <a
-                    className="hover-zoom"
-                    href={sponsor.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      pointerEvents: sponsor.url ? "inherit" : "none",
-                      position: "relative",
-                    }}
-                  >
-                    <img
-                      src={sponsor.img}
-                      alt={sponsor.name}
-                      style={{
-                        maxHeight: sponsor.height ? sponsor.height : "80px",
-                        width: "100%",
-                      }}
-                    />
-                  </a>
+      {/* <BackgroundVectorColoredReversed maxWidth="1920px"> */}
+      {/* section5 */}
+      {showLandingSection5 && (
+        <LandingSection fullWidth maxWidth="1920px">
+          <SpeakersContainer className="layout">
+            <Stack direction="column">
+              {landingSection5Title && (
+                <LandingTitle title={landingSection5Title} textAlign="right" />
+              )}
+              <Stack direction="row" flexWrap="wrap">
+                {keynoteSpeakers.map((speaker) => (
+                  <SpeakerCard key={speaker.id} speaker={speaker} />
                 ))}
               </Stack>
             </Stack>
-          </LandingSection>
-        )}
-      </BackgroundVectorColored>
+          </SpeakersContainer>
+        </LandingSection>
+      )}
+      {showLandingSection7 && landingSection7Sponsors && (
+        <LandingSection fullWidth maxWidth="1920px">
+          <Stack className="layout">
+            <LandingTitle title={landingSection7Title || "Sponsored By"} />
+            <Stack
+              flexWrap="wrap"
+              alignItems="center"
+              sx={{
+                flexDirection: {
+                  mobile: "column",
+                  tablet: "row",
+                },
+              }}
+            >
+              {landingSection7Sponsors.map((sponsor) => (
+                <a
+                  className="hover-zoom"
+                  href={sponsor.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    pointerEvents: sponsor.url ? "inherit" : "none",
+                    position: "relative",
+                  }}
+                >
+                  <img
+                    src={sponsor.img}
+                    alt={sponsor.name}
+                    style={{
+                      maxHeight: sponsor.height ? sponsor.height : "80px",
+                      width: "100%",
+                    }}
+                  />
+                </a>
+              ))}
+            </Stack>
+          </Stack>
+        </LandingSection>
+      )}
 
       {/* <CookieConsent
         style={{

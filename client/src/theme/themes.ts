@@ -25,7 +25,7 @@ declare module "@mui/material/styles" {
     main: string;
     contrastText: string;
     contrastTextAlpha?: string;
-    navy?: string;
+    darkText?: string;
     alpha50?: string;
     gradation?: string;
     verticalGradation?: string;
@@ -38,7 +38,7 @@ declare module "@mui/material/styles" {
     contrastText: string;
     contrastTextAlpha?: string;
     alpha50?: string;
-    navy?: string;
+    darkText?: string;
     heading?: string;
     gradation?: string;
     verticalGradation?: string;
@@ -53,13 +53,13 @@ const getDesignTokens = (mode: PaletteMode) => ({
     ? {
         primary: {
           light: "#0040ff",
-          main: "#21ade5",
-          dark: "#189cd1",
-          navy: "#222e57",
+          main: "#F37A2B",
+          dark: "#F05523",
+          darkText: "#741d00",
           heading: "#222e57",
           contrastText: "#fff",
           contrastTextAlpha: "#ffffffad",
-          gradation: "linear-gradient(270deg, #243d7c, #26a4dd)",
+          gradation: "linear-gradient(270deg, #F8A13A, #F05523)",
           verticalGradation: "linear-gradient(0deg, #243d7c, #26a4dd)",
           overlay: "linear-gradient(0deg, #2ba4dd52, transparent)",
           mainBg: "#EDF4FC",

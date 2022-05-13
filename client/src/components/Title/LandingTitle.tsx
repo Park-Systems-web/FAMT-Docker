@@ -2,6 +2,7 @@
 import React from "react";
 import { useTheme, Box } from "@mui/material";
 import { headingFontSize } from "utils/FontSize";
+import InnerHTML from "dangerously-set-html-content";
 
 interface LandingTitleProps {
   title: string;
@@ -13,9 +14,14 @@ const LandingTitle = ({ title, textAlign = "left" }: LandingTitleProps) => {
   return (
     <Box
       fontWeight={theme.typography.fontWeightBold}
-      sx={{ textAlign, mb: 3, fontSize: headingFontSize }}
+      sx={{
+        textAlign,
+        mb: 3,
+        fontSize: headingFontSize,
+        color: theme.palette.primary.darkText,
+      }}
     >
-      {title}
+      <InnerHTML html={title} />
     </Box>
   );
 };

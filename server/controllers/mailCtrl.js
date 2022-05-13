@@ -11,7 +11,7 @@ const mailCtrl = {
     const connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT EXISTS
-      (SELECT email FROM user WHERE email="admin1")
+      (SELECT email FROM user WHERE email="${email}")
       as emailExist`;
 
       const row = await connection.query(sql);

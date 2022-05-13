@@ -18,11 +18,10 @@ const MenuLink = (props: MenuLinkProps) => {
   const [active, setActive] = useState<string>("");
   const pathname = usePageViews();
   const subpath = useSubPath();
-
   const theme = useTheme();
 
   useEffect(() => {
-    if (to === `/${pathname + subpath}`) {
+    if (to === `${subpath}`) {
       setActive("active");
     } else {
       setActive("");

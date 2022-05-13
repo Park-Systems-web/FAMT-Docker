@@ -14,7 +14,7 @@ export const NSSButtonContainer = styled.button`
       return theme.palette.text.primary;
     }};
     &:hover {
-      background-color: rgba(33, 173, 229, 0.04);
+      background-color: rgba(243, 122, 43, 0.04);
     }
     &:active {
       background-color: rgba(255, 255, 255, 0.1);

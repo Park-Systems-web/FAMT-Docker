@@ -490,8 +490,8 @@ export const globalData = new Map<string, Common.globalDataType>([
   [
     "famt",
     {
-      fullName: "2022 NanoScientific Forum Europe",
-      fullDate: "October 6-7, 2022",
+      fullName: "FAMT 2022",
+      fullDate: "22 July, 2022",
       logoURL: `${S3_URL}/eu/menu-bar-logo.svg?v=0.03`,
       speakers: "Speakers",
       programs: "PROGRAM",
@@ -523,10 +523,11 @@ export const globalData = new Map<string, Common.globalDataType>([
       showLandingSection7: true,
       landingSection1BackgroundURL: `${S3_URL}/eu/main-page-banner.jpg`,
       landingSection1LogoURL: `${S3_URL}/eu/logo-type-1b.svg`,
-      landingSection1Desc: `Welcome to the virtual platform of
-      NanoScientific Forum Europe (NSFE)
+      landingSection1Desc: `Join the International SPM Symposium<br/>
+      the platform for Failure Analysis and Material Testing
       `,
-      landingSection2Title: "About NSFE:",
+      landingSection2Title: `International SPM Symposium<br/>
+      Failure Analysis & Material Testing`,
       landingSection2Desc: `
       NSFE is a part of <strong>Nanoscientific Symposium Series</strong> taking place each year around the globe.<br/><br/>
       The European edition, NSFE is an open European AFM User Forum focusing on sharing and exchanging the cutting-edge research for both materials and life science disciplines using Atomic Force Microscopy (AFM). 
