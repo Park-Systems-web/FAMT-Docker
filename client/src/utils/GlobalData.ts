@@ -488,7 +488,7 @@ export const globalData = new Map<string, Common.globalDataType>([
     },
   ],
   [
-    "eu",
+    "famt",
     {
       fullName: "2022 NanoScientific Forum Europe",
       fullDate: "October 6-7, 2022",
@@ -499,7 +499,7 @@ export const globalData = new Map<string, Common.globalDataType>([
       exhibitHall: "EXHIBIT HALL",
       // sponsors: "SPONSORS",
       home: "HOME",
-      // registration: "REGISTRATION",
+      registration: "REGISTRATION",
       // buttonText
       signInText: "SIGN IN",
       goNextText: "NEXT",

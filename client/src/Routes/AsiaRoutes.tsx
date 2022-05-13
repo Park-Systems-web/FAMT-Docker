@@ -15,45 +15,45 @@ const formNo = "1247";
 
 export default [
   {
-    path: `/${pathname}`,
+    path: ``,
     element: <Landing key={`${pathname}-landing-section`} />,
   },
   {
-    path: `/${pathname}/registration`,
+    path: `/registration`,
     element: <Registration formNo={formNo} />,
   },
   {
-    path: `/${pathname}/program`,
+    path: `/program`,
     element: <Programs />,
   },
   {
-    path: `/${pathname}/speakers`,
+    path: `/speakers`,
     element: <Speakers />,
   },
   {
-    path: `/${pathname}/speakers/:id`,
+    path: `/speakers/:id`,
     element: <SpeakerDetail />,
   },
   {
-    path: `/${pathname}/lecture-hall`,
+    path: `/lecture-hall`,
     element: <LectureHall />,
     isPrivate: true,
   },
   {
-    path: `/${pathname}/exhibit/parksystems`,
+    path: `/exhibit/parksystems`,
     element: <ExhibitParkSystems />,
   },
   {
-    path: `/${pathname}/exhibit/nanoscientific`,
+    path: `/exhibit/nanoscientific`,
     element: <ExhibitNanoScientific />,
   },
   {
-    path: `/${pathname}/user/reset-password`,
+    path: `/user/reset-password`,
     element: <ResetPassword />,
     isPrivate: true,
   },
   {
-    path: `/${pathname}/user/forgot-password`,
+    path: `/user/forgot-password`,
     element: <ForgotPassword />,
   },
 ];

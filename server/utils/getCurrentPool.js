@@ -1,32 +1,26 @@
-const {
-  asiaPool,
-  koreaPool,
-  usPool,
-  japanPool,
-  europePool,
-} = require("../dbConfigPool");
+const { famtPool } = require("../dbConfigPool");
 
 module.exports = {
   getCurrentPool: (req) => {
-    let currentPool = "";
-    switch (req) {
-      case "asia":
-        currentPool = asiaPool;
-        break;
-      case "kr":
-        currentPool = koreaPool;
-        break;
-      case "americas":
-        currentPool = usPool;
-        break;
-      case "jp":
-        currentPool = japanPool;
-        break;
-      case "eu":
-        currentPool = europePool;
-        break;
-    }
+    // let currentPool = "";
+    // switch (req) {
+    //   case "asia":
+    //     currentPool = asiaPool;
+    //     break;
+    //   case "kr":
+    //     currentPool = koreaPool;
+    //     break;
+    //   case "americas":
+    //     currentPool = usPool;
+    //     break;
+    //   case "jp":
+    //     currentPool = japanPool;
+    //     break;
+    //   case "eu":
+    //     currentPool = europePool;
+    //     break;
+    // }
     // return currentPool;
-    return "famt";
+    return famtPool;
   },
 };

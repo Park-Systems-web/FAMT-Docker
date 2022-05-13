@@ -28,7 +28,7 @@ import { mainFontSize } from "utils/FontSize";
 import PublicIcon from "@mui/icons-material/Public";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import useMenuStore from "store/MenuStore";
-import EuropeLoginModal from "../Modal/EuropeLoginModal";
+import LoginModal from "../Modal/LoginModal";
 import MobileNavBar from "./MobileNavBar";
 
 interface navProps {
@@ -177,7 +177,7 @@ const NavBar = ({
           <MenuIcon />
         </IconButton>
         <Link
-          to={`/${pathname}`}
+          to="/"
           className={`${hideMenu ? "logo-link disabled" : "logo-link"}`}
           style={{ padding: "0px" }}
         >
@@ -194,7 +194,7 @@ const NavBar = ({
                 menuList.map((menu) => (
                   <MenuLink
                     key={menu.name}
-                    to={`/${pathname}${menu.path}`}
+                    to={`${menu.path}`}
                     // published={
                     //   menu.is_published === 1 ||
                     //   editorRole.includes(authState.role)
@@ -231,7 +231,7 @@ const NavBar = ({
                       <MenuItem
                         onClick={() => {
                           handleUserMenuClose();
-                          navigate(`${pathname}/user/reset-password`);
+                          navigate(`/user/reset-password`);
                         }}
                       >
                         {changePasswordBtnText || "Change Password"}
@@ -244,7 +244,7 @@ const NavBar = ({
                       variant="primary"
                       style={{ fontWeight: 700 }}
                       onClick={() => {
-                        navigate(`${pathname}/admin`);
+                        navigate(`/admin`);
                       }}
                     >
                       {adminBtnText || "ADMIN"}
@@ -282,7 +282,7 @@ const NavBar = ({
                     <NSSButton
                       variant="gradient"
                       onClick={() => {
-                        navigate(`${pathname}/registration`);
+                        navigate(`/registration`);
                       }}
                       style={{ alignSelf: "center" }}
                       fontSize={mainFontSize}

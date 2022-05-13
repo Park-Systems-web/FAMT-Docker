@@ -9,7 +9,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import useSubPath from "hooks/useSubPath";
 import { theme, jpTheme } from "theme/themes";
 import PrivateRoute from "components/Route/PrivateRoute";
-import EuropeLoginModal from "components/Modal/EuropeLoginModal";
+import LoginModal from "components/Modal/LoginModal";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import NotFound from "pages/common/NotFound/NotFound";
 import useMenuStore from "store/MenuStore";
@@ -142,9 +142,6 @@ const App = () => {
     setCurrentMenuState(window.location.pathname);
   }, [menuList, window.location.href]);
 
-  // useEffect(() => {
-  // }, [window.location.href]);
-  //
   if (authState.isLoading) return <Loading />;
 
   return (
@@ -169,40 +166,16 @@ const App = () => {
           )}
 
         <Routes>
-          {/* common */}
-          <Route path="/" element={<EventLanding />} />
           {/* asia */}
           {AsiaRoutes.map((route) => {
             return routeLoopHelper(route);
           })}
           {/* korea */}
-          {KoreaRoutes.map((route) => {
-            return routeLoopHelper(route);
-          })}
-          {/* us */}
-          {UsRoutes.map((route) => {
-            return routeLoopHelper(route);
-          })}
-          {/* japan */}
-          {JapanRoutes.map((route) => {
-            return routeLoopHelper(route);
-          })}
-          {/* europe */}
-          {EuropeRoutes.map((route) => {
-            return routeLoopHelper(route);
-          })}
-          {/* admin */}
-          {AdminRoutes.map((route) => {
-            return routeLoopHelper(route, true);
-          })}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        {pathname !== "home" &&
-          pathname !== "admin" &&
-          window.location.pathname !== "/jp/archive" && <Footer />}
 
         {pathname !== "" && (
-          <EuropeLoginModal
+          <LoginModal
             setSuccess={setLoginSuccess}
             setFailed={setLoginFailed}
             emailModalOpen={emailModalOpen}
