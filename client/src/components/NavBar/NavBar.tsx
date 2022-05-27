@@ -72,13 +72,6 @@ const NavBar = ({
     setAnchorEl(null);
   };
   const [openMobileNav, setOpenMobileNav] = useState<boolean>(false);
-  // const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
-  // const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
-  // const [loginFailed, setLoginFailed] = useState<boolean>(false);
-  // const [logoutSuccess, setLogoutSuccess] = useState<boolean>(false);
-  // const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
-  // const [passwordSetSuccessAlert, setPasswordSetSuccessAlert] =
-  //   useState<boolean>(false);
 
   const pathname = usePageViews();
   const subpath = useSubPath();
@@ -154,19 +147,6 @@ const NavBar = ({
 
   return (
     <NavBarContainer className={`${openMobileNav ? "mobile" : ""}`}>
-      {!hideMenu && (
-        <NSSButton
-          variant="icon"
-          className="return-main-btn"
-          style={{ position: "absolute", padding: "8px 8px 8px 0" }}
-          onClick={() => {
-            navigate(`/`);
-          }}
-        >
-          <ChevronLeftIcon />
-          <PublicIcon sx={{ marginLeft: "-4px" }} />
-        </NSSButton>
-      )}
       <Stack
         direction="row"
         alignItems="center"
@@ -179,7 +159,7 @@ const NavBar = ({
         <Link
           to="/"
           className={`${hideMenu ? "logo-link disabled" : "logo-link"}`}
-          style={{ padding: "0px" }}
+          style={{ padding: "0px", marginRight: "20px" }}
         >
           <img src={logoURL} alt="logo" />
         </Link>

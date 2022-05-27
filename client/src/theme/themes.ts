@@ -60,7 +60,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
           contrastText: "#fff",
           contrastTextAlpha: "#ffffffad",
           gradation: "linear-gradient(270deg, #F8A13A, #F05523)",
-          verticalGradation: "linear-gradient(0deg, #243d7c, #26a4dd)",
+          verticalGradation: "linear-gradient(180deg, #F8A13A, #F05523)",
           overlay: "linear-gradient(0deg, #2ba4dd52, transparent)",
           mainBg: "#EDF4FC",
         },

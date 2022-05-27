@@ -13,14 +13,12 @@ import LoginModal from "components/Modal/LoginModal";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import NotFound from "pages/common/NotFound/NotFound";
 import useMenuStore from "store/MenuStore";
+import Cookies from "universal-cookie";
+import { CatchingPokemonSharp } from "@mui/icons-material";
 import { useAuthState, useAuthDispatch } from "./context/AuthContext";
 import { useThemeState, useThemeDispatch } from "./context/ThemeContext";
+import FamtRoutes from "./Routes/FamtRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
-import AsiaRoutes from "./Routes/AsiaRoutes";
-import KoreaRoutes from "./Routes/KoreaRoutes";
-import UsRoutes from "./Routes/UsRoutes";
-import EuropeRoutes from "./Routes/EuropeRoutes";
-import JapanRoutes from "./Routes/JapanRoutes";
 import Loading from "./components/Loading/Loading";
 import { AppContainer } from "./AppStyles";
 
@@ -64,11 +62,20 @@ const App = () => {
   const subpath = useSubPath();
 
   useEffect(() => {
+    const cookie = new Cookies();
+    console.log(cookie);
     axios
-      .post(`${process.env.API_URL}/api/users/check`, {
-        accessToken: authState.accessToken,
-        nation: pathname === "" ? "" : pathname,
-      })
+      .post(
+        `${process.env.API_URL}/api/users/check`,
+        {
+          accessToken: authState.accessToken,
+          refreshToken: cookie.get("refreshToken"),
+          nation: pathname === "" ? "" : pathname,
+        },
+        {
+          withCredentials: true,
+        },
+      )
       .then((res) => {
         if (res.data.success !== false) {
           const { accessToken, email, role } = res.data.data;
@@ -145,48 +152,45 @@ const App = () => {
   if (authState.isLoading) return <Loading />;
 
   return (
-    <ThemeProvider theme={pathname === "jp" ? jpThemeObj : themeObj}>
+    <ThemeProvider theme={themeObj}>
       <AppContainer>
-        {pathname !== "home" &&
-          pathname !== "" &&
-          subpath.indexOf("admin") === -1 &&
-          window.location.pathname !== "/eu/registration" && (
-            <NavBar
-              checkLoading={authState.isLoading}
-              passwordSetModalOpen={passwordSetModalOpen}
-              emailModalOpen={emailModalOpen}
-              setEmailModalOpen={setEmailModalOpen}
-              setPasswordSetModalOpen={setPasswordSetModalOpen}
-              passwordInputModalOpen={passwordInputModalOpen}
-              setPasswordInputModalOpen={setPasswordInputModalOpen}
-              setLogoutSuccess={setLogoutSuccess}
-              setLogoutLoading={setLogoutLoading}
-              menuStateLoading={menuStateLoading}
-            />
-          )}
-
-        <Routes>
-          {/* asia */}
-          {AsiaRoutes.map((route) => {
-            return routeLoopHelper(route);
-          })}
-          {/* korea */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-
-        {pathname !== "" && (
-          <LoginModal
-            setSuccess={setLoginSuccess}
-            setFailed={setLoginFailed}
+        {window.location.href.indexOf("admin") === -1 && (
+          <NavBar
+            checkLoading={authState.isLoading}
+            passwordSetModalOpen={passwordSetModalOpen}
             emailModalOpen={emailModalOpen}
             setEmailModalOpen={setEmailModalOpen}
-            setPasswordSetSuccessAlert={setPasswordSetSuccessAlert}
-            passwordSetModalOpen={passwordSetModalOpen}
             setPasswordSetModalOpen={setPasswordSetModalOpen}
             passwordInputModalOpen={passwordInputModalOpen}
             setPasswordInputModalOpen={setPasswordInputModalOpen}
+            setLogoutSuccess={setLogoutSuccess}
+            setLogoutLoading={setLogoutLoading}
+            menuStateLoading={menuStateLoading}
           />
         )}
+        <Routes>
+          {/* Famt */}
+          {FamtRoutes.map((route) => {
+            return routeLoopHelper(route);
+          })}
+          {/* admin */}
+          {AdminRoutes.map((route) => {
+            return routeLoopHelper(route, true);
+          })}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+
+        <LoginModal
+          setSuccess={setLoginSuccess}
+          setFailed={setLoginFailed}
+          emailModalOpen={emailModalOpen}
+          setEmailModalOpen={setEmailModalOpen}
+          setPasswordSetSuccessAlert={setPasswordSetSuccessAlert}
+          passwordSetModalOpen={passwordSetModalOpen}
+          setPasswordSetModalOpen={setPasswordSetModalOpen}
+          passwordInputModalOpen={passwordInputModalOpen}
+          setPasswordInputModalOpen={setPasswordInputModalOpen}
+        />
 
         {/* alert */}
         <TopCenterSnackBar

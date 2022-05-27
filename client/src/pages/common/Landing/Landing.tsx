@@ -48,12 +48,7 @@ const Landing = () => {
     landingSection3Title,
     landingSection3Desc,
     landingSection4Title,
-    landingSection4List1Title,
-    landingSection4List1,
-    landingSection4List2Title,
-    landingSection4List2,
-    landingSection4List3Title,
-    landingSection4List3,
+    landingSection4List,
     landingSection5Title,
     landingSection6Title,
     landingSection6Desc,
@@ -112,9 +107,10 @@ const Landing = () => {
             alt="logo"
             style={{
               maxWidth: "600px",
-              height: "300px",
+              // height: "300px",
               width: "100%",
               minWidth: "200px",
+              marginBottom: "50px",
             }}
           />
           <Stack
@@ -134,7 +130,7 @@ const Landing = () => {
                 <Typography
                   fontSize={headingFontSize}
                   fontWeight={700}
-                  color={theme.palette.primary.darkText}
+                  // color={theme.palette.primary.darkText}
                 >
                   {eventLocation}
                 </Typography>
@@ -145,7 +141,7 @@ const Landing = () => {
                   }}
                   fontWeight={700}
                   fontSize={subHeadingFontSize}
-                  color={theme.palette.primary.darkText}
+                  // color={theme.palette.primary.darkText}
                 >
                   |
                 </Typography>
@@ -154,7 +150,7 @@ const Landing = () => {
             <Typography
               fontSize={headingFontSize}
               fontWeight={700}
-              color={theme.palette.primary.darkText}
+              // color={theme.palette.primary.darkText}
             >
               {fullDate}
             </Typography>
@@ -222,37 +218,6 @@ const Landing = () => {
                 <InnerHTML html={landingSection2Desc || ""} />
               </Box>
             </Stack>
-            {/* {landingSection2Video && (
-                <Stack
-                  sx={{
-                    display: "flex",
-                    width: {
-                      tablet: "40%",
-                      mobile: "100%",
-                    },
-                    height: {
-                      tablet: "100%",
-                      mobile: "40%",
-                    },
-                    position: "relative",
-                  }}
-                >
-                  <Box
-                    className="z1"
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                      mb: { mobile: 4, tablet: 0 },
-                    }}
-                  >
-                    <YoutubeEmbed
-                      embedId={landingSection2Video}
-                      width="400"
-                      height="250"
-                    />
-                  </Box>
-                </Stack>
-              )} */}
           </Stack>
         </LandingSection>
       )}
@@ -284,15 +249,41 @@ const Landing = () => {
                 color: theme.palette.common.white,
               }}
             >
-              <Box
-                className="gradient-box"
-                sx={{
-                  width: { laptop: "25%" },
-                  p: 3,
-                  mb: { mobile: 5, laptop: 0 },
-                }}
-              >
-                <Typography
+              {landingSection4List?.map((list) => (
+                <Box
+                  className="gradient-box"
+                  sx={{
+                    width: {
+                      laptop: `calc(90% / ${landingSection4List.length})`,
+                    },
+                    p: 3,
+                    mb: { mobile: 5, laptop: 0 },
+                  }}
+                  key={list.title}
+                >
+                  {list.title && (
+                    <Typography
+                      fontSize={subHeadingFontSize}
+                      fontWeight={theme.typography.fontWeightBold}
+                    >
+                      {list.title}
+                    </Typography>
+                  )}
+                  <ul style={{ marginInlineStart: "35px" }}>
+                    {list.content.map((item) => (
+                      <li style={{ marginBottom: "15px" }}>
+                        <Typography
+                          fontWeight={theme.typography.fontWeightMedium}
+                          fontSize={smallFontSize}
+                        >
+                          {item}
+                        </Typography>
+                      </li>
+                    ))}
+                  </ul>
+                </Box>
+              ))}
+              {/* <Typography
                   fontSize={subHeadingFontSize}
                   fontWeight={theme.typography.fontWeightBold}
                 >
@@ -308,62 +299,8 @@ const Landing = () => {
                         {item}
                       </Typography>
                     </li>
-                  ))}
-                </ul>
-              </Box>
-              <Box
-                className="gradient-box"
-                sx={{
-                  width: { laptop: "25%" },
-                  p: 3,
-                  mb: { mobile: 5, laptop: 0 },
-                }}
-              >
-                <Typography
-                  fontSize={subHeadingFontSize}
-                  fontWeight={theme.typography.fontWeightBold}
-                >
-                  {landingSection4List2Title}
-                </Typography>
-                <ul style={{ marginInlineStart: "35px" }}>
-                  {landingSection4List2?.map((item) => (
-                    <li style={{ marginBottom: "15px" }}>
-                      <Typography
-                        fontWeight={theme.typography.fontWeightMedium}
-                        fontSize={smallFontSize}
-                      >
-                        {item}
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
-              </Box>
-              <Box
-                className="gradient-box"
-                sx={{
-                  width: { laptop: "25%" },
-                  p: 3,
-                }}
-              >
-                <Typography
-                  fontSize={subHeadingFontSize}
-                  fontWeight={theme.typography.fontWeightBold}
-                >
-                  {landingSection4List3Title}
-                </Typography>
-                <ul style={{ marginInlineStart: "35px" }}>
-                  {landingSection4List3?.map((item) => (
-                    <li style={{ marginBottom: "15px" }}>
-                      <Typography
-                        fontSize={smallFontSize}
-                        fontWeight={theme.typography.fontWeightMedium}
-                      >
-                        <InnerHTML html={item} />
-                      </Typography>
-                    </li>
-                  ))}
-                </ul>
-              </Box>
+                   ))} 
+                </ul> */}
             </Stack>
           </Stack>
         </LandingSection>

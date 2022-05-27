@@ -12,201 +12,45 @@ import AdminUsers from "../pages/admin/AdminUsers/AdminUsers";
 
 export default [
   {
-    path: "/asia/admin",
+    path: "/admin",
     element: (
-      <AdminRoute key="/asia/admin">
+      <AdminRoute key="/admin">
         <Admin />
       </AdminRoute>
     ),
   },
+
   {
-    path: "/kr/admin",
+    path: "/admin/program",
     element: (
-      <AdminRoute key="/kr/admin">
-        <Admin />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/americas/admin",
-    element: (
-      <AdminRoute key="/americas/admin">
-        <Admin />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/jp/admin",
-    element: (
-      <AdminRoute key="/jp/admin">
-        <Admin />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/eu/admin",
-    element: (
-      <AdminRoute key="/eu/admin">
-        <Admin />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/asia/admin/program",
-    element: (
-      <AdminRoute key="/asia/admin/program">
+      <AdminRoute key="/admin/program">
         <AdminPrograms />
       </AdminRoute>
     ),
   },
+
   {
-    path: "/kr/admin/program",
+    path: "/admin/speakers",
     element: (
-      <AdminRoute key="/kr/admin/program">
-        <AdminPrograms />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/americas/admin/program",
-    element: (
-      <AdminRoute key="/americas/admin/program">
-        <AdminPrograms />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/jp/admin/program",
-    element: (
-      <AdminRoute key="/jp/admin/program">
-        <AdminPrograms />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/eu/admin/program",
-    element: (
-      <AdminRoute key="/eu/admin/program">
-        <AdminPrograms />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/asia/admin/speakers",
-    element: (
-      <AdminRoute key="/asia/admin/speakers">
+      <AdminRoute key="/admin/speakers">
         <AdminSpeakers />
       </AdminRoute>
     ),
   },
+
   {
-    path: "/kr/admin/speakers",
+    path: "/admin/users",
     element: (
-      <AdminRoute key="/kr/admin/speakers">
-        <AdminSpeakers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/americas/admin/speakers",
-    element: (
-      <AdminRoute key="/americas/admin/speakers">
-        <AdminSpeakers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/jp/admin/speakers",
-    element: (
-      <AdminRoute key="/jp/admin/speakers">
-        <AdminSpeakers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/eu/admin/speakers",
-    element: (
-      <AdminRoute key="/eu/admin/speakers">
-        <AdminSpeakers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/asia/admin/users",
-    element: (
-      <AdminRoute key="/asia/admin/users">
+      <AdminRoute key="/admin/users">
         <AdminUsers />
       </AdminRoute>
     ),
   },
+
   {
-    path: "/kr/admin/users",
+    path: "/admin/menus",
     element: (
-      <AdminRoute key="/kr/admin/users">
-        <AdminUsers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/jp/admin/users",
-    element: (
-      <AdminRoute key="/jp/admin/users">
-        <AdminUsers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/americas/admin/users",
-    element: (
-      <AdminRoute key="/americas/admin/users">
-        <AdminUsers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/eu/admin/users",
-    element: (
-      <AdminRoute key="/eu/admin/users">
-        <AdminUsers />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/asia/admin/menus",
-    element: (
-      <AdminRoute key="/asia/admin/menus">
-        <AdminMenus />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/kr/admin/menus",
-    element: (
-      <AdminRoute key="/kr/admin/menus">
-        <AdminMenus />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/jp/admin/menus",
-    element: (
-      <AdminRoute key="/jp/admin/menus">
-        <AdminMenus />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/americas/admin/menus",
-    element: (
-      <AdminRoute key="/americas/admin/menus">
-        <AdminMenus />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/eu/admin/menus",
-    element: (
-      <AdminRoute key="/eu/admin/menus">
+      <AdminRoute key="/admin/menus">
         <AdminMenus />
       </AdminRoute>
     ),

@@ -101,6 +101,11 @@ declare namespace Common {
     height?: string;
   }
 
+  interface landingSection4Type {
+    title?: string;
+    content: string[];
+  }
+
   interface globalDataType {
     fullName?: string;
     fullDate?: string;
@@ -171,12 +176,7 @@ declare namespace Common {
     landingSection3Title?: string;
     landingSection3Desc?: string;
     landingSection4Title?: string;
-    landingSection4List1Title?: string;
-    landingSection4List1?: string[];
-    landingSection4List2Title?: string;
-    landingSection4List2?: string[];
-    landingSection4List3Title?: string;
-    landingSection4List3?: string[];
+    landingSection4List?: landingSection4Type[];
     landingSection5Title?: string;
     landingSection6Title?: string;
     landingSection6ButtonLink?: string;

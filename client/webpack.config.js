@@ -76,6 +76,9 @@ module.exports = (env, argv) => {
     // proxy 설정
     devServer: {
       historyApiFallback: true,
+      proxy: {
+        "/api": "http://localhost:5000",
+      },
     },
     // uglify
     optimization: {

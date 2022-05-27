@@ -18,7 +18,7 @@ const LandingTitle = ({ title, textAlign = "left" }: LandingTitleProps) => {
         textAlign,
         mb: 3,
         fontSize: headingFontSize,
-        color: theme.palette.primary.darkText,
+        // color: theme.palette.primary.darkText,
       }}
     >
       <InnerHTML html={title} />

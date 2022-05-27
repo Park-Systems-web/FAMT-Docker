@@ -7,13 +7,28 @@ const bodyParser = require("body-parser");
 const cookies = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 
+var whitelist = [
+  "http://localhost:8080",
+  "http://ec2-18-144-161-137.us-west-1.compute.amazonaws.com:81/",
+];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookies());
+app.use(cors(corsOptions));
 
 // if(process.env.NODE_ENV === 'production'){
 //     app.use(express.static('client/build'))

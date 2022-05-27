@@ -40,14 +40,6 @@ export default [
     isPrivate: true,
   },
   {
-    path: `/exhibit/parksystems`,
-    element: <ExhibitParkSystems />,
-  },
-  {
-    path: `/exhibit/nanoscientific`,
-    element: <ExhibitNanoScientific />,
-  },
-  {
     path: `/user/reset-password`,
     element: <ResetPassword />,
     isPrivate: true,

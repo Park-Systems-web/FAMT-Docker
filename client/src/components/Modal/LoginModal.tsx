@@ -21,6 +21,7 @@ import Timer from "components/Timer/Timer";
 import { globalData } from "utils/GlobalData";
 import useInput from "hooks/useInput";
 import { smallFontSize } from "utils/FontSize";
+import Cookies from "universal-cookie";
 import usePageViews from "../../hooks/usePageViews";
 import { useAuthState, useAuthDispatch } from "../../context/AuthContext";
 
@@ -215,13 +216,27 @@ const LoginModal = ({
   const loginHandler = async (email: string, password: string) => {
     setLoading(true);
     axios
-      .post(`${process.env.API_URL}/api/users/login`, {
-        email,
-        password,
-        nation: pathname,
-      })
+      .post(
+        `${process.env.API_URL}/api/users/login`,
+        {
+          email,
+          password,
+          nation: pathname,
+        },
+        {
+          withCredentials: true,
+        },
+      )
       .then((res) => {
         if (res.data.success === true) {
+          console.log(res.data.refreshToken);
+          // const cookies = new Cookies();
+          // cookies.set("refreshToken", res.data.refreshToken, {
+          //   path: "/",
+          //   httpOnly: true,
+          //   sameSite: false,
+          // });
+          //
           dispatchLogin(email, res.data.role, res.data.accessToken);
           setSuccess(true);
           setPasswordInputModalOpen(false);
