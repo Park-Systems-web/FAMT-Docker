@@ -21,7 +21,6 @@ import Timer from "components/Timer/Timer";
 import { globalData } from "utils/GlobalData";
 import useInput from "hooks/useInput";
 import { smallFontSize } from "utils/FontSize";
-import Cookies from "universal-cookie";
 import usePageViews from "../../hooks/usePageViews";
 import { useAuthState, useAuthDispatch } from "../../context/AuthContext";
 

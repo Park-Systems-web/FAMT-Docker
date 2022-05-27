@@ -13,7 +13,6 @@ import LoginModal from "components/Modal/LoginModal";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import NotFound from "pages/common/NotFound/NotFound";
 import useMenuStore from "store/MenuStore";
-import Cookies from "universal-cookie";
 import { CatchingPokemonSharp } from "@mui/icons-material";
 import { useAuthState, useAuthDispatch } from "./context/AuthContext";
 import { useThemeState, useThemeDispatch } from "./context/ThemeContext";
@@ -62,14 +61,11 @@ const App = () => {
   const subpath = useSubPath();
 
   useEffect(() => {
-    const cookie = new Cookies();
-    console.log(cookie);
     axios
       .post(
         `${process.env.API_URL}/api/users/check`,
         {
           accessToken: authState.accessToken,
-          refreshToken: cookie.get("refreshToken"),
           nation: pathname === "" ? "" : pathname,
         },
         {
