@@ -55,7 +55,7 @@ app.use(
   swaggerUi.setup(require("./config/swaggerDoc"))
 );
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log("Sever is running on port ", PORT);
 });
