@@ -164,7 +164,7 @@ const Landing = () => {
               fontWeight={theme.typography.fontWeightBold}
               letterSpacing="1.2px"
               onClick={() => {
-                navigate(`/${pathname}/registration`);
+                navigate(`/registration`);
               }}
             >
               {registration}
