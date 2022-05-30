@@ -25,22 +25,22 @@ const AdminNavBar = () => {
   const menus = [
     {
       title: "Programs",
-      link: `/${pathname}/admin/program`,
+      link: `/admin/program`,
       icon: <EventNoteTwoToneIcon />,
     },
     {
       title: "Speakers",
-      link: `/${pathname}/admin/speakers`,
+      link: `/admin/speakers`,
       icon: <CampaignTwoToneIcon />,
     },
     {
       title: "Users",
-      link: `/${pathname}/admin/users`,
+      link: `/admin/users`,
       icon: <PeopleAltTwoToneIcon />,
     },
     {
       title: "Menus",
-      link: `/${pathname}/admin/menus`,
+      link: `/admin/menus`,
       icon: <MenuIcon />,
       adminOnly: true,
     },
