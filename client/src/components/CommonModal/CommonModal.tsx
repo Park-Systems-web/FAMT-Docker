@@ -67,7 +67,13 @@ const CommonModal = ({
         TransitionComponent={transitionDir ? Transition : undefined}
         disableScrollLock
       >
-        <DialogTitle sx={{ backgroundColor: "#21ade5", color: "#fff", mb: 2 }}>
+        <DialogTitle
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+            color: "#fff",
+            mb: 2,
+          }}
+        >
           {title}
         </DialogTitle>
         <DialogContent>

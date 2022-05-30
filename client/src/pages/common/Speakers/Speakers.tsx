@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Grid, Stack } from "@mui/material";
-import Title from "components/Title/Title";
 import Loading from "components/Loading/Loading";
 import usePageViews from "hooks/usePageViews";
 import useSeoTitle from "hooks/useSeoTitle";
 import { globalData, S3_URL } from "utils/GlobalData";
 import SpeakerCard from "components/SpeakerCard/SpeakerCard";
-import LandingSection from "components/Section/LandingSection";
 import ComingSoon from "components/ComingSoon/ComingSoon";
 import useMenuStore from "store/MenuStore";
 import { useAuthState } from "context/AuthContext";
@@ -21,27 +19,25 @@ const Speakers = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const pathname = usePageViews();
   useEffect(() => {
-    const config = {
-      params: {
-        nation: pathname,
-      },
-    };
-    const getSpeakers = async () => {
-      setLoading(true);
-      const speakers = await axios.get(
-        `${process.env.API_URL}/api/page/common/speakers`,
-        config,
-      );
-      setSpeakersState(speakers.data);
-      setLoading(false);
-    };
     getSpeakers();
   }, []);
 
+  const config = {
+    params: {
+      nation: pathname,
+    },
+  };
+  const getSpeakers = async () => {
+    setLoading(true);
+    const speakers = await axios.get(
+      `${process.env.API_URL}/api/page/common/speakers`,
+      config,
+    );
+    setSpeakersState(speakers.data);
+    setLoading(false);
+  };
+
   const { speakers } = globalData.get(pathname) as Common.globalDataType;
-  const { speakerBannerURL } = globalData.get(
-    "common",
-  ) as Common.globalDataType;
   useSeoTitle(speakers as string);
 
   if (loading) {
@@ -50,13 +46,6 @@ const Speakers = () => {
 
   return (
     <SpeakersContainer className="body-fit">
-      {/* <Title fontSize={30} title={speakers || "Speakers"} /> */}
-      <LandingSection
-        className="banner"
-        background={speakerBannerURL}
-        maxWidth="1920px"
-        fullWidth
-      />
       <Box sx={{ flexGrow: 1 }} className="layout">
         {currentMenu &&
           currentMenu.is_published === 0 &&

@@ -84,10 +84,16 @@ const NavBar = ({
   const logoutHandler = async (email: string) => {
     setLogoutLoading(true);
     axios
-      .post(`${process.env.API_URL}/api/users/logout`, {
-        email,
-        nation: pathname,
-      })
+      .post(
+        `${process.env.API_URL}/api/users/logout`,
+        {
+          email,
+          nation: pathname,
+        },
+        {
+          withCredentials: true,
+        },
+      )
       .then((res) => {
         if (res.data.success === true) {
           authDispatch({ type: "LOGOUT", authState });
@@ -109,24 +115,6 @@ const NavBar = ({
     setOpenMobileNav(!openMobileNav);
   };
 
-  // active router 감지 effect hook
-  // useEffect(() => {
-  //   if (document.querySelector(`.menu-link[href="/${pathname + subpath}"]`)) {
-  //     document
-  //       .querySelector(`.menu-link[href="/${pathname + subpath}"]`)
-  //       ?.parentElement?.classList.add("active");
-  //   } else {
-  //     document
-  //       .querySelector(`.submenu-link[href="/${pathname + subpath}"]`)
-  //       ?.parentElement?.classList.add("active");
-  //     document
-  //       .querySelector(`.submenu-link[href="/${pathname + subpath}"]`)
-  //       ?.parentElement?.parentElement?.parentElement?.parentElement?.classList.add(
-  //         "active",
-  //       );
-  //   }
-  // }, []);
-
   const {
     logoURL,
     speakers,
@@ -147,31 +135,31 @@ const NavBar = ({
 
   return (
     <NavBarContainer className={`${openMobileNav ? "mobile" : ""}`}>
-      <Stack
-        direction="row"
-        alignItems="center"
-        className="nav-wrap"
-        justifyContent="center"
-      >
-        <IconButton className="mobile-menu-btn" onClick={toggleMobileNav}>
-          <MenuIcon />
-        </IconButton>
-        <Link
-          to="/"
-          className={`${hideMenu ? "logo-link disabled" : "logo-link"}`}
-          style={{ padding: "0px", marginRight: "20px" }}
+      {!menuStateLoading && (
+        <Stack
+          direction="row"
+          alignItems="center"
+          className="nav-wrap"
+          justifyContent="center"
         >
-          <img src={logoURL} alt="logo" />
-        </Link>
-        {!hideMenu && (
-          <div className="menu-container">
-            <Stack
-              direction="row"
-              alignSelf="flex-end"
-              className="menu-item-wrap"
-            >
-              {!menuStateLoading &&
-                menuList.map((menu) => (
+          <IconButton className="mobile-menu-btn" onClick={toggleMobileNav}>
+            <MenuIcon />
+          </IconButton>
+          <Link
+            to="/"
+            className={`${hideMenu ? "logo-link disabled" : "logo-link"}`}
+            style={{ padding: "0px", marginRight: "20px" }}
+          >
+            <img src={logoURL} alt="logo" />
+          </Link>
+          {!hideMenu && (
+            <div className="menu-container">
+              <Stack
+                direction="row"
+                alignSelf="flex-end"
+                className="menu-item-wrap"
+              >
+                {menuList.map((menu) => (
                   <MenuLink
                     key={menu.name}
                     to={`${menu.path}`}
@@ -183,101 +171,102 @@ const NavBar = ({
                     {menu.name.toUpperCase()}
                   </MenuLink>
                 ))}
-              {authState.isLogin && !checkLoading && (
-                <div className="user-menu-wrap">
-                  <NSSButton
-                    id="basic-button"
-                    className="user-menu"
-                    type="button"
-                    variant="icon"
-                    onClick={handleUserMenuClick}
-                    aria-controls={openUserMenu ? "basic-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openUserMenu ? "true" : undefined}
-                  >
-                    <PersonIcon />
-                  </NSSButton>
-                  <Menu
-                    id="basic-menu"
-                    open={openUserMenu}
-                    onClose={handleUserMenuClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                    anchorEl={anchorEl}
-                    disableScrollLock
-                  >
-                    <MenuList dense>
-                      <MenuItem
+                {authState.isLogin && !checkLoading && (
+                  <div className="user-menu-wrap">
+                    <NSSButton
+                      id="basic-button"
+                      className="user-menu"
+                      type="button"
+                      variant="icon"
+                      onClick={handleUserMenuClick}
+                      aria-controls={openUserMenu ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openUserMenu ? "true" : undefined}
+                    >
+                      <PersonIcon />
+                    </NSSButton>
+                    <Menu
+                      id="basic-menu"
+                      open={openUserMenu}
+                      onClose={handleUserMenuClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                      anchorEl={anchorEl}
+                      disableScrollLock
+                    >
+                      <MenuList dense>
+                        <MenuItem
+                          onClick={() => {
+                            handleUserMenuClose();
+                            navigate(`/user/reset-password`);
+                          }}
+                        >
+                          {changePasswordBtnText || "Change Password"}
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                    {editorRole.includes(authState.role) && (
+                      <NSSButton
+                        type="button"
+                        variant="primary"
+                        style={{ fontWeight: 700 }}
                         onClick={() => {
-                          handleUserMenuClose();
-                          navigate(`/user/reset-password`);
+                          navigate(`/admin`);
                         }}
                       >
-                        {changePasswordBtnText || "Change Password"}
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                  {editorRole.includes(authState.role) && (
+                        {adminBtnText || "ADMIN"}
+                      </NSSButton>
+                    )}
+
                     <NSSButton
                       type="button"
                       variant="primary"
                       style={{ fontWeight: 700 }}
                       onClick={() => {
-                        navigate(`/admin`);
+                        logoutHandler(authState.email);
                       }}
                     >
-                      {adminBtnText || "ADMIN"}
+                      {signOutBtnText || "SIGN OUT"}
                     </NSSButton>
-                  )}
+                  </div>
+                )}
+                {!authState.isLogin && !checkLoading && (
+                  <div className="user-menu-wrap">
+                    {signInText && (
+                      <NSSButton
+                        type="button"
+                        variant="primary"
+                        style={{ fontWeight: 700 }}
+                        onClick={() => {
+                          setEmailModalOpen(true);
+                        }}
+                      >
+                        {signInText}
+                      </NSSButton>
+                    )}
 
-                  <NSSButton
-                    type="button"
-                    variant="primary"
-                    style={{ fontWeight: 700 }}
-                    onClick={() => {
-                      logoutHandler(authState.email);
-                    }}
-                  >
-                    {signOutBtnText || "SIGN OUT"}
-                  </NSSButton>
-                </div>
-              )}
-              {!authState.isLogin && !checkLoading && (
-                <div className="user-menu-wrap">
-                  {signInText && (
-                    <NSSButton
-                      type="button"
-                      variant="primary"
-                      style={{ fontWeight: 700 }}
-                      onClick={() => {
-                        setEmailModalOpen(true);
-                      }}
-                    >
-                      {signInText}
-                    </NSSButton>
-                  )}
-
-                  {registration && (
-                    <NSSButton
-                      variant="gradient"
-                      onClick={() => {
-                        navigate(`/registration`);
-                      }}
-                      style={{ alignSelf: "center" }}
-                      fontSize={mainFontSize}
-                      fontWeight={theme.typography.fontWeightBold}
-                      letterSpacing="1.2px"
-                    >
-                      {registration}
-                    </NSSButton>
-                  )}
-                </div>
-              )}
-            </Stack>
-          </div>
-        )}
-      </Stack>
+                    {registration && (
+                      <NSSButton
+                        variant="gradient"
+                        onClick={() => {
+                          navigate(`/registration`);
+                        }}
+                        style={{ alignSelf: "center" }}
+                        fontSize={mainFontSize}
+                        fontWeight={theme.typography.fontWeightBold}
+                        letterSpacing="1.2px"
+                      >
+                        {registration}
+                      </NSSButton>
+                    )}
+                  </div>
+                )}
+              </Stack>
+            </div>
+          )}
+        </Stack>
+      )}
       <Box
         className="overlay"
         sx={{

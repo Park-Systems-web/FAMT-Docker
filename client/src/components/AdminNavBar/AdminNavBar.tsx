@@ -82,7 +82,7 @@ const AdminNavBar = () => {
       </List>
       <Divider />
       <List>
-        <Link to={`/${pathname}`}>
+        <Link to="/">
           <ListItem button>
             <ListItemIcon>
               <LogoutTwoToneIcon />

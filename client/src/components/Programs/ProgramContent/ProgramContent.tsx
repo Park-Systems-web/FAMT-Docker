@@ -77,7 +77,7 @@ const ProgramContent = ({
     transition: "all 0.2s ease-in-out",
     opacity: "1.0",
     ".speaker-text": {
-      color: "#14b1e7",
+      color: theme.palette.primary.main,
     },
     ".title-col": {
       // whiteSpace: "nowrap",

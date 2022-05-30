@@ -23,7 +23,6 @@ const AuthDispatchContext = createContext<AuthDispatch | null>(null);
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "LOGIN":
-      console.log("로그인!");
       return {
         ...state,
         isLogin: true,

@@ -101,12 +101,6 @@ const ProgramsList = () => {
 
   return (
     <ProgramsListContainer className="body-fit">
-      <LandingSection
-        className="banner"
-        background={programBannerURL}
-        maxWidth="1920px"
-        fullWidth
-      />
       <Box className="layout">
         <StyledTimezoneSelect
           value={selectedTimezone}

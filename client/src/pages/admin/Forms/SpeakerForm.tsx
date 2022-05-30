@@ -1,12 +1,14 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import CommonModal from "components/CommonModal/CommonModal";
 import S3Upload from "components/S3Upload/S3Upload";
+import AddPhotoAlternateTwoToneIcon from "@mui/icons-material/AddPhotoAlternateTwoTone";
 import {
   TextField,
   Checkbox,
   FormControlLabel,
   Stack,
   Typography,
+  Fab,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import axios from "axios";

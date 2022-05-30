@@ -13,7 +13,12 @@ import LoginModal from "components/Modal/LoginModal";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import NotFound from "pages/common/NotFound/NotFound";
 import useMenuStore from "store/MenuStore";
-import { CatchingPokemonSharp } from "@mui/icons-material";
+import { CatchingPokemonSharp, Edit } from "@mui/icons-material";
+import LandingSection from "components/Section/LandingSection";
+import { S3_URL } from "utils/GlobalData";
+import { Button, IconButton, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import UploadButton from "components/UploadButton/UploadButton";
 import { useAuthState, useAuthDispatch } from "./context/AuthContext";
 import { useThemeState, useThemeDispatch } from "./context/ThemeContext";
 import FamtRoutes from "./Routes/FamtRoutes";
@@ -36,6 +41,8 @@ const App = () => {
   // 로그인 관련
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [loginFailed, setLoginFailed] = useState<boolean>(false);
+  const [bannerURL, setBannerURL] = useState<string>("");
+  const [bannerLoading, setBannerLoading] = useState<boolean>(false);
   const [passwordSetSuccessAlert, setPasswordSetSuccessAlert] =
     useState<boolean>(false);
   const [logoutSuccess, setLogoutSuccess] = useState<boolean>(false);
@@ -59,6 +66,39 @@ const App = () => {
 
   // subpath 가져오기
   const subpath = useSubPath();
+
+  // banner
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+  const [imagePath, setImagePath] = useState<string>("");
+
+  const submitBannerHandler = async (imagePath: string) => {
+    await axios.post(
+      `
+    ${process.env.API_URL}/api/page/common/banner`,
+      {
+        nation: pathname,
+        path: encodeURIComponent(window.location.pathname),
+        imagePath,
+      },
+    );
+    setBannerURL(imagePath);
+  };
+
+  const getBanner = async () => {
+    setBannerLoading(true);
+    const banner = await axios.get(`
+    ${
+      process.env.API_URL
+    }/api/page/common/banner?nation=${pathname}&path=${encodeURIComponent(
+      window.location.pathname,
+    )}`);
+    if (banner.data.success) {
+      setBannerURL(banner.data.result);
+    } else {
+      setBannerURL("");
+    }
+    setBannerLoading(false);
+  };
 
   useEffect(() => {
     axios
@@ -121,7 +161,6 @@ const App = () => {
 
   // menu state
   const [menuStateLoading, setMenuStateLoading] = useState<boolean>(true);
-  // const [menuList, setMenuList] = useState<Common.menuType[]>(null);
   const menuStore = useMenuStore();
   const { menuList, currentMenu, setMenuList, setCurrentMenuState } = menuStore;
   useEffect(() => {
@@ -143,7 +182,10 @@ const App = () => {
 
   useEffect(() => {
     setCurrentMenuState(window.location.pathname);
-  }, [menuList, window.location.href]);
+  }, [menuList, window.location.href, window.location.pathname]);
+  useEffect(() => {
+    getBanner();
+  }, [bannerURL, window.location.href]);
 
   if (authState.isLoading) return <Loading />;
 
@@ -164,17 +206,48 @@ const App = () => {
             menuStateLoading={menuStateLoading}
           />
         )}
-        <Routes>
-          {/* Famt */}
-          {FamtRoutes.map((route) => {
-            return routeLoopHelper(route);
-          })}
-          {/* admin */}
-          {AdminRoutes.map((route) => {
-            return routeLoopHelper(route, true);
-          })}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {!bannerLoading && bannerURL !== "" && (
+          <UploadButton
+            setImagePath={setImagePath}
+            uploadLoading={uploadLoading}
+            setUploadLoading={setUploadLoading}
+            uploadPath="famt/common/banner"
+            submitHandler={submitBannerHandler}
+          >
+            <Button
+              variant="outlined"
+              component="span"
+              sx={{
+                position: "absolute",
+                color: `${themeObj.palette.primary.main}`,
+                m: 1,
+              }}
+            >
+              <EditIcon />
+            </Button>
+          </UploadButton>
+        )}
+        {!bannerLoading && bannerURL && (
+          <LandingSection
+            className="banner"
+            background={`${S3_URL}/${bannerURL}`}
+            maxWidth="1920px"
+            fullWidth
+          />
+        )}
+        {!bannerLoading && (
+          <Routes>
+            {/* Famt */}
+            {FamtRoutes.map((route) => {
+              return routeLoopHelper(route);
+            })}
+            {/* admin */}
+            {AdminRoutes.map((route) => {
+              return routeLoopHelper(route, true);
+            })}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        )}
 
         <LoginModal
           setSuccess={setLoginSuccess}

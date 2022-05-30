@@ -5,6 +5,7 @@ import AddPhotoAlternateTwoToneIcon from "@mui/icons-material/AddPhotoAlternateT
 import { useLocation } from "react-router";
 import usePageViews from "hooks/usePageViews";
 import { S3_URL } from "utils/GlobalData";
+import S3Props, { S3_BUCKET } from "utils/S3Props";
 
 interface S3UploadProps {
   setImagePath: Dispatch<SetStateAction<string>>;
@@ -14,17 +15,7 @@ interface S3UploadProps {
   setUploadLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-const ACCESS_KEY = process.env.REACT_APP_S3_ACCESS_KEY;
-const SECRET_ACCESS_KEY = process.env.REACT_APP_S3_SECRET_ACCESS_KEY;
-const REGION = "us-west-1";
-const S3_BUCKET = "nss-integration";
-
-export const myBucket = new S3({
-  params: { Bucket: S3_BUCKET },
-  region: REGION,
-  accessKeyId: ACCESS_KEY,
-  secretAccessKey: SECRET_ACCESS_KEY,
-});
+export const myBucket = new S3(S3Props);
 
 const S3Upload = ({
   setImagePath,
@@ -50,7 +41,7 @@ const S3Upload = ({
         file.type === "image/webp"
       )
     ) {
-      alert("only jpg allowed");
+      alert("file type not allowed");
       return;
     }
     setProgress(0);

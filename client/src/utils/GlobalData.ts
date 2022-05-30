@@ -48,7 +48,7 @@ export const globalData = new Map<string, Common.globalDataType>([
           img: `${S3_URL}/kr/main-page-banner.jpg`,
         },
       ],
-      logoURL: `${S3_URL}/common/NSS_logo_Type3.svg`,
+      logoURL: `${S3_URL}/famt/common/famt-full-logo.jpg`,
       teaserVideoURL: `${S3_URL}/common/2022NSS_Teaser_v1.0_LQ.mp4`,
       teaserVideoEmbed: "a",
       bannerLogoURL: `${S3_URL}/common/NSS_logo_white_main.svg`,
@@ -78,8 +78,7 @@ export const globalData = new Map<string, Common.globalDataType>([
     {
       fullName: "FAMT 2022",
       fullDate: "22 July, 2022",
-      // logoURL: `${S3_URL}/eu/menu-bar-logo.svg?v=0.03`,
-      logoURL: `/assets/famt-nav-logo.jpg`,
+      logoURL: `${S3_URL}/famt/common/famt-nav-logo.jpg`,
       speakers: "Speakers",
       programs: "PROGRAM",
       lectureHall: "LECTURE HALL",
@@ -109,9 +108,9 @@ export const globalData = new Map<string, Common.globalDataType>([
       showLandingSection6: true,
       showLandingSection7: true,
       // landingSection1BackgroundURL: `${S3_URL}/eu/main-page-banner.jpg`,
-      landingSection1BackgroundURL: `/assets/main-banner.jpg`,
+      landingSection1BackgroundURL: `${S3_URL}/famt/common/main-banner.jpg`,
       // landingSection1LogoURL: `${S3_URL}/eu/logo-type-1b.svg`,
-      landingSection1LogoURL: `/assets/famt-full-logo.jpg`,
+      landingSection1LogoURL: `${S3_URL}/famt/common/famt-full-logo.jpg`,
       landingSection1Desc: `Join the International SPM Symposium<br/>
       the platform for Failure Analysis and Material Testing
       `,
