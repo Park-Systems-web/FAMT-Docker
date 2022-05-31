@@ -79,7 +79,9 @@ const App = () => {
     ${process.env.API_URL}/api/page/common/banner`,
       {
         nation: pathname,
-        path: encodeURIComponent(window.location.pathname),
+        path: encodeURIComponent(
+          window.location.pathname.replace(/\/+(\d)+/g, ""),
+        ),
         imagePath,
       },
     );
@@ -92,7 +94,7 @@ const App = () => {
     ${
       process.env.API_URL
     }/api/page/common/banner?nation=${pathname}&path=${encodeURIComponent(
-      window.location.pathname,
+      window.location.pathname.replace(/\/+(\d)+/g, ""),
     )}`);
     if (banner.data.success) {
       setBannerURL(banner.data.result);

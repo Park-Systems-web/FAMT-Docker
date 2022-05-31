@@ -108,52 +108,53 @@ const ProgramsList = () => {
             setSelectedTimezone(e.value);
           }}
         />
-        {currentMenu &&
+        {((currentMenu &&
           currentMenu.is_published === 0 &&
-          !editorRole.includes(authState.role) && <ComingSoon />}
-        {(currentMenu && currentMenu.is_published === 1) ||
-          (editorRole.includes(authState.role) &&
-            sessions.map((session) => {
-              return (
-                <TableContainer
-                  key={session.id}
-                  sx={{ overflowX: "hidden", mb: 8 }}
-                >
-                  <ProgramTitle
-                    title={session.session_title}
-                    timezone={selectedTimezone}
-                    date={session.date}
-                  />
-                  <div className="program-table-container">
-                    <Table
-                      sx={{
-                        width: "100%",
-                        minWidth: "600px",
-                        mb: 1,
-                        borderCollapse: "separate",
-                        borderSpacing: "10px",
-                      }}
-                    >
-                      <TableBody>
-                        {programs
-                          .filter((program) => {
-                            return program.session === session.id;
-                          })
-                          .map((program, index) => (
-                            <ProgramContent
-                              selectedTimezone={selectedTimezone}
-                              isAdmin={false}
-                              key={program.id}
-                              {...program}
-                              index={index}
-                            />
-                          ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </TableContainer>
-              );
-            }))}
+          !editorRole.includes(authState.role)) ||
+          sessions.length === 0) && <ComingSoon />}
+        {((currentMenu && currentMenu.is_published === 1) ||
+          editorRole.includes(authState.role)) &&
+          sessions.map((session) => {
+            return (
+              <TableContainer
+                key={session.id}
+                sx={{ overflowX: "hidden", mb: 8 }}
+              >
+                <ProgramTitle
+                  title={session.session_title}
+                  timezone={selectedTimezone}
+                  date={session.date}
+                />
+                <div className="program-table-container">
+                  <Table
+                    sx={{
+                      width: "100%",
+                      minWidth: "600px",
+                      mb: 1,
+                      borderCollapse: "separate",
+                      borderSpacing: "10px",
+                    }}
+                  >
+                    <TableBody>
+                      {programs
+                        .filter((program) => {
+                          return program.session === session.id;
+                        })
+                        .map((program, index) => (
+                          <ProgramContent
+                            selectedTimezone={selectedTimezone}
+                            isAdmin={false}
+                            key={program.id}
+                            {...program}
+                            index={index}
+                          />
+                        ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TableContainer>
+            );
+          })}
       </Box>
     </ProgramsListContainer>
   );

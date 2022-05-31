@@ -196,25 +196,28 @@ const LectureHall = () => {
               </Stack>
             </>
           )}
-          {currentMenu &&
-            currentMenu.is_published === 0 &&
-            !editorRole.includes(authState.role) && <ComingSoon />}
-          {(currentMenu && currentMenu.is_published === 1) ||
-            (editorRole.includes(authState.role) &&
-              webinarList.map((webinar) => (
-                <ZoomCard
-                  key={webinar.id}
-                  webinar={webinar}
-                  timezone={selectedTimezone}
-                  isOnAir={
-                    liveWebinarList.filter(
-                      (liveWebinar) => webinar.id === liveWebinar.id,
-                    ).length !== 0
-                  }
-                  setSuccessAlert={setAddRegistrantSuccess}
-                  setFailedAlert={setAddRegistrantFailed}
-                />
-              )))}
+          {!getWebinarLoading &&
+            ((currentMenu &&
+              currentMenu.is_published === 0 &&
+              !editorRole.includes(authState.role)) ||
+              webinarList.length === 0) && <ComingSoon />}
+          {!getWebinarLoading &&
+            ((currentMenu && currentMenu.is_published === 1) ||
+              editorRole.includes(authState.role)) &&
+            webinarList.map((webinar) => (
+              <ZoomCard
+                key={webinar.id}
+                webinar={webinar}
+                timezone={selectedTimezone}
+                isOnAir={
+                  liveWebinarList.filter(
+                    (liveWebinar) => webinar.id === liveWebinar.id,
+                  ).length !== 0
+                }
+                setSuccessAlert={setAddRegistrantSuccess}
+                setFailedAlert={setAddRegistrantFailed}
+              />
+            ))}
         </Stack>
       </Stack>
       <TopCenterSnackBar

@@ -43,21 +43,22 @@ const Speakers = () => {
   return (
     <SpeakersContainer className="body-fit">
       <Box sx={{ flexGrow: 1 }} className="layout">
-        {currentMenu &&
+        {((currentMenu &&
           currentMenu.is_published === 0 &&
-          !editorRole.includes(authState.role) && <ComingSoon />}
-        {(currentMenu && currentMenu.is_published === 1) ||
-          (editorRole.includes(authState.role) && (
-            <Grid
-              container
-              spacing={{ xs: 4, md: 7 }}
-              columns={{ xs: 1, sm: 8, md: 16 }}
-            >
-              {speakersState.map((speaker) => (
-                <SpeakerCard key={speaker.id} speaker={speaker} />
-              ))}
-            </Grid>
-          ))}
+          !editorRole.includes(authState.role)) ||
+          speakersState.length === 0) && <ComingSoon />}
+        {((currentMenu && currentMenu.is_published === 1) ||
+          editorRole.includes(authState.role)) && (
+          <Grid
+            container
+            spacing={{ xs: 4, md: 7 }}
+            columns={{ xs: 1, sm: 8, md: 16 }}
+          >
+            {speakersState.map((speaker) => (
+              <SpeakerCard key={speaker.id} speaker={speaker} />
+            ))}
+          </Grid>
+        )}
       </Box>
     </SpeakersContainer>
   );

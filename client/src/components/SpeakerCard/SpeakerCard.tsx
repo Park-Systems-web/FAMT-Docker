@@ -50,7 +50,7 @@ const SpeakerCard = ({
       onClick={onClick}
     >
       <Link
-        to={`/${pathname}/speakers/${speaker.id}`}
+        to={`/speakers/${speaker.id}`}
         style={{
           padding: 0,
           pointerEvents:
