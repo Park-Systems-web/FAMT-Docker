@@ -3,7 +3,6 @@ import axios from "axios";
 import { Box, Grid, Stack } from "@mui/material";
 import Loading from "components/Loading/Loading";
 import usePageViews from "hooks/usePageViews";
-import useSeoTitle from "hooks/useSeoTitle";
 import { globalData, S3_URL } from "utils/GlobalData";
 import SpeakerCard from "components/SpeakerCard/SpeakerCard";
 import ComingSoon from "components/ComingSoon/ComingSoon";
@@ -36,9 +35,6 @@ const Speakers = () => {
     setSpeakersState(speakers.data);
     setLoading(false);
   };
-
-  const { speakers } = globalData.get(pathname) as Common.globalDataType;
-  useSeoTitle(speakers as string);
 
   if (loading) {
     return <Loading />;

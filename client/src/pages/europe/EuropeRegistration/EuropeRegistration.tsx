@@ -3,7 +3,6 @@ import { Button, Box } from "@mui/material";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router";
 import { globalData } from "utils/GlobalData";
-import useSeoTitle from "hooks/useSeoTitle";
 import axios from "axios";
 import usePageViews from "hooks/usePageViews";
 import { useAuthState, useAuthDispatch } from "context/AuthContext";
@@ -37,10 +36,6 @@ const EuropeRegistration = () => {
         accessToken: t,
       },
     });
-
-  // seo
-  const { registration } = globalData.get(nation) as Common.globalDataType;
-  useSeoTitle(registration as string);
 
   useEffect(() => {
     const script = document.createElement("script");

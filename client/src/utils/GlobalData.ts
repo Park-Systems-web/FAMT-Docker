@@ -153,22 +153,22 @@ export const globalData = new Map<string, Common.globalDataType>([
           img: `${S3_URL}/common/Park_logo.svg`,
           url: "https://parksystems.com",
         },
-        {
-          name: "Imaging & Microscopy",
-          img: `${S3_URL}/eu/sponsors/imaging_microscopy_logo.png`,
-          url: "https://analyticalscience.wiley.com/do/10.1002/was.0004000235",
-        },
-        {
-          name: "NuNano",
-          img: `${S3_URL}/eu/sponsors/nunano_logo.png`,
-          url: "https://www.nunano.com/",
-        },
-        {
-          name: "NANOscientific",
-          img: `${S3_URL}/eu/sponsors/nanoscientific_logo.png`,
-          url: "https://nanoscientific.org/",
-          height: "40px",
-        },
+        // {
+        //   name: "Imaging & Microscopy",
+        //   img: `${S3_URL}/eu/sponsors/imaging_microscopy_logo.png`,
+        //   url: "https://analyticalscience.wiley.com/do/10.1002/was.0004000235",
+        // },
+        // {
+        //   name: "NuNano",
+        //   img: `${S3_URL}/eu/sponsors/nunano_logo.png`,
+        //   url: "https://www.nunano.com/",
+        // },
+        // {
+        //   name: "NANOscientific",
+        //   img: `${S3_URL}/eu/sponsors/nanoscientific_logo.png`,
+        //   url: "https://nanoscientific.org/",
+        //   height: "40px",
+        // },
       ],
       // resetPassword
       resetPasswordHeading: "Change a Password",

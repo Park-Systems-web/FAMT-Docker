@@ -3,17 +3,24 @@ import InnerHTML from "dangerously-set-html-content";
 import useHTML from "hooks/useHTML";
 import Loading from "components/Loading/Loading";
 import usePageViews from "hooks/usePageViews";
-import useSeoTitle from "hooks/useSeoTitle";
 import { globalData } from "utils/GlobalData";
 import LandingTitle from "components/Title/LandingTitle";
 import LandingSection from "components/Section/LandingSection";
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import NSSButton from "components/Button/NSSButton";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SpeakerCard from "components/SpeakerCard/SpeakerCard";
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import YoutubeEmbed from "components/YoutubeEmbed/YoutubeEmbed";
+import EditIcon from "@mui/icons-material/Edit";
 
 // import { LiveChatWidget } from "@livechat/widget-react";
 import {
@@ -22,12 +29,18 @@ import {
   smallFontSize,
   headingFontSize,
 } from "utils/FontSize";
+import { editorRole } from "utils/Roles";
+import { useAuthState } from "context/AuthContext";
+import QuillEditor from "components/QuillEditor/QuillEditor";
+import LandingTextEditor from "components/LandingTextEditor/LandingTextEditor";
 import { SpeakersContainer } from "../Speakers/SpeakersStyles";
+import { LandingContainer } from "./LandingStyles";
 
 const Landing = () => {
   const pathname = usePageViews();
   const theme = useTheme();
-
+  const authState = useAuthState();
+  const isEditor = editorRole.includes(authState.role);
   const {
     home,
     registration,
@@ -42,8 +55,6 @@ const Landing = () => {
     landingSection1Desc,
     landingSection1LogoURL,
     landingSection1BackgroundURL,
-    landingSection2Title,
-    landingSection2Desc,
     landingSection2Video,
     landingSection3Title,
     landingSection3Desc,
@@ -60,7 +71,6 @@ const Landing = () => {
     cookieConsentText,
     seePrivacyPolicyText,
   } = globalData.get(pathname) as Common.globalDataType;
-  useSeoTitle(home as string);
 
   const navigate = useNavigate();
 
@@ -72,6 +82,41 @@ const Landing = () => {
     window.open(url, "_blank");
   };
 
+  // landing section
+  const [landingSection2Content, setLandingSection2Content] =
+    useState<Common.landingSection2Type>(null);
+  const [landing2Title, setLanding2Title] = useState<string>("");
+  const [landing2TitleEdit, setLanding2TitleEdit] = useState<boolean>(false);
+  const [landing2TitlePreviewContent, setLanding2TitlePreviewContent] =
+    useState<string>("");
+  const [landing2TitlePreview, setLanding2TitlePreview] =
+    useState<boolean>(false);
+  const [landing2Desc, setLanding2Desc] = useState<string>("");
+  const [landing2DescEdit, setLanding2DescEdit] = useState<boolean>(false);
+  const [landing2DescPreviewContent, setLanding2DescPreviewContent] =
+    useState<string>("");
+  const [landing2DescPreview, setLanding2DescPreview] =
+    useState<boolean>(false);
+  const getLandingContent = async (id: number) => {
+    const result = await axios.get(
+      `${process.env.API_URL}/api/page/common/landing/${id}?nation=${pathname}`,
+    );
+    setLandingSection2Content(result.data.result);
+    setLanding2Title(result.data.result.title);
+    setLanding2Desc(result.data.result.description);
+  };
+  const applyLanding2Content = async () => {
+    // eslint-disable-next-line no-alert, no-restricted-globals
+    if (confirm("Are you sure?")) {
+      const result = await axios.post(
+        `${process.env.API_URL}/api/page/common/landing/2`,
+        { nation: pathname, title: landing2Title, description: landing2Desc },
+      );
+      setLanding2Title(landing2Title);
+      setLanding2Desc(landing2Desc);
+      navigate(0);
+    }
+  };
   useEffect(() => {
     axios
       .get(
@@ -83,10 +128,11 @@ const Landing = () => {
       .catch((err) => {
         console.log(err);
       });
+    getLandingContent(2);
   }, []);
 
   return (
-    <>
+    <LandingContainer>
       <LandingSection
         fullWidth
         maxWidth="1920px"
@@ -127,11 +173,7 @@ const Landing = () => {
           >
             {eventLocation !== undefined && (
               <>
-                <Typography
-                  fontSize={headingFontSize}
-                  fontWeight={700}
-                  // color={theme.palette.primary.darkText}
-                >
+                <Typography fontSize={headingFontSize} fontWeight={700}>
                   {eventLocation}
                 </Typography>
                 <Typography
@@ -141,17 +183,12 @@ const Landing = () => {
                   }}
                   fontWeight={700}
                   fontSize={subHeadingFontSize}
-                  // color={theme.palette.primary.darkText}
                 >
                   |
                 </Typography>
               </>
             )}
-            <Typography
-              fontSize={headingFontSize}
-              fontWeight={700}
-              // color={theme.palette.primary.darkText}
-            >
+            <Typography fontSize={headingFontSize} fontWeight={700}>
               {fullDate}
             </Typography>
           </Stack>
@@ -181,7 +218,7 @@ const Landing = () => {
           </Typography>
         </Stack>
       </LandingSection>
-      {showLandingSection2 && (
+      {showLandingSection2 && landingSection2Content && (
         <LandingSection fullWidth>
           <Stack
             className="layout"
@@ -204,19 +241,43 @@ const Landing = () => {
                   tablet: 5,
                 },
               }}
-              // width={{
-              //   tablet: "55%",
-              //   mobile: "100%",
-              // }}
-              // height={{
-              //   tablet: "100%",
-              //   mobile: "55%",
-              // }}
             >
-              <LandingTitle title={landingSection2Title || ""} />
-              <Box fontSize={mainFontSize}>
-                <InnerHTML html={landingSection2Desc || ""} />
-              </Box>
+              <LandingTextEditor
+                initialValue={landingSection2Content.title}
+                value={landing2Title}
+                setValue={setLanding2Title}
+                edit={landing2TitleEdit}
+                setEdit={setLanding2TitleEdit}
+                preview={landing2TitlePreview}
+                setPreview={setLanding2TitlePreview}
+                previewContent={landing2TitlePreviewContent}
+                setPreviewContent={setLanding2TitlePreviewContent}
+                applyHandler={applyLanding2Content}
+                sx={{
+                  mb: 3,
+                  fontSize: headingFontSize,
+                  fontWeight: theme.typography.fontWeightBold,
+                }}
+              >
+                {landingSection2Content.title || ""}
+              </LandingTextEditor>
+              <LandingTextEditor
+                initialValue={landingSection2Content.description}
+                value={landing2Desc}
+                setValue={setLanding2Desc}
+                edit={landing2DescEdit}
+                setEdit={setLanding2DescEdit}
+                preview={landing2DescPreview}
+                setPreview={setLanding2DescPreview}
+                previewContent={landing2DescPreviewContent}
+                setPreviewContent={setLanding2DescPreviewContent}
+                applyHandler={applyLanding2Content}
+                sx={{
+                  fontSize: smallFontSize,
+                }}
+              >
+                {landingSection2Content.description || ""}
+              </LandingTextEditor>
             </Stack>
           </Stack>
         </LandingSection>
@@ -396,7 +457,7 @@ const Landing = () => {
       </CookieConsent> */}
 
       {/* <LiveChatWidget license="13874505" group="0" /> */}
-    </>
+    </LandingContainer>
   );
 };
 

@@ -18,7 +18,6 @@ const QuillEditor = (props: editorProps) => {
   const pathname = usePageViews();
 
   const imageHandler = () => {
-    console.log("Hello Quill imageHandler!");
     // 1. 이미지를 저장할 input type=file DOM을 만든다.
     const input = document.createElement("input");
     // 속성 써주기
@@ -27,7 +26,6 @@ const QuillEditor = (props: editorProps) => {
     input.click(); // 에디터 이미지버튼을 클릭하면 이 input이 클릭된다.
     // input이 클릭되면 파일 선택창이 나타난다.
     input.addEventListener("change", async () => {
-      console.log("온체인지");
       const file = input.files[0];
       // multer에 맞는 형식으로 데이터 만들어준다.
       const formData = new FormData();
@@ -82,6 +80,24 @@ const QuillEditor = (props: editorProps) => {
       }
     });
   };
+  const fontSizeArr = [
+    "8px",
+    "9px",
+    "10px",
+    "12px",
+    "14px",
+    "16px",
+    "20px",
+    "22px",
+    "24px",
+    "26px",
+    "28px",
+    "30px",
+    "32px",
+  ];
+  // const Size = ReactQuill.Quill.import("attributors/style/size");
+  // Size.whitelist = fontSizeArr;
+  // ReactQuill.Quill.register(Size, true);
 
   const modules = useMemo(() => {
     return {
@@ -90,8 +106,8 @@ const QuillEditor = (props: editorProps) => {
           ["image"],
           ["bold", "italic", "underline", "strike"], // toggled buttons
           ["blockquote"],
-
-          [{ header: [false, 1, 2, 3] }], // custom button values
+          // [{ header: [false, 1, 2, 3] }], // custom button values
+          // [{ size: fontSizeArr }],
           [{ list: "ordered" }, { list: "bullet" }],
           [{ script: "sub" }, { script: "super" }], // superscript/subscript
           [{ indent: "-1" }, { indent: "+1" }], // outdent/indent

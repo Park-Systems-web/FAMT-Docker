@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import usePageViews from "hooks/usePageViews";
 import Loading from "components/Loading/Loading";
-import useSeoTitle from "hooks/useSeoTitle";
 import { globalData } from "utils/GlobalData";
 import { LoadingButton } from "@mui/lab";
 import { useAuthState, useAuthDispatch } from "context/AuthContext";
@@ -39,12 +38,10 @@ const Registration = ({ formNo }: RegistrationProps) => {
 
   // seo
   const {
-    registration,
     registrationStep1Label,
     registrationStep2Label,
     registrationStep3Label,
   } = globalData.get(nation) as Common.globalDataType;
-  useSeoTitle(registration as string);
 
   const dispatchLogin = (e: string, r: string, t: string) =>
     dispatch({

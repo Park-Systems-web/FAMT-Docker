@@ -211,11 +211,16 @@ const NavBar = ({
                         type="button"
                         variant="primary"
                         style={{ fontWeight: 700 }}
-                        onClick={() => {
-                          navigate(`/admin`);
-                        }}
+                        // onClick={() => {
+                        //   navigate(`/admin`);
+                        // }}
                       >
-                        {adminBtnText || "ADMIN"}
+                        <Link
+                          to="/admin"
+                          style={{ padding: 0, color: "black" }}
+                        >
+                          {adminBtnText || "ADMIN"}
+                        </Link>
                       </NSSButton>
                     )}
 

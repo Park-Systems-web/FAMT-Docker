@@ -70,6 +70,10 @@ export const AppContainer = styled.div`
     }
   }
 
+  .ql-container {
+    font-family: inherit !important;
+  }
+
   .body-fit {
     min-height: calc(100vh - 64px);
   }

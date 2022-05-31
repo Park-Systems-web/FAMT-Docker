@@ -19,6 +19,8 @@ import { S3_URL } from "utils/GlobalData";
 import { Button, IconButton, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import UploadButton from "components/UploadButton/UploadButton";
+import { editorRole } from "utils/Roles";
+import useSeoTitle from "hooks/useSeoTitle";
 import { useAuthState, useAuthDispatch } from "./context/AuthContext";
 import { useThemeState, useThemeDispatch } from "./context/ThemeContext";
 import FamtRoutes from "./Routes/FamtRoutes";
@@ -145,6 +147,10 @@ const App = () => {
       });
   }, [authState.isLoading, pathname, subpath]);
 
+  useEffect(() => {
+    // 스크롤 to top
+    window.scrollTo(0, 0);
+  }, [pathname, subpath, window.location.search]);
   // 로그아웃
 
   const routeLoopHelper = (route: routeType, isPrivate?: boolean) => {
@@ -163,6 +169,8 @@ const App = () => {
   const [menuStateLoading, setMenuStateLoading] = useState<boolean>(true);
   const menuStore = useMenuStore();
   const { menuList, currentMenu, setMenuList, setCurrentMenuState } = menuStore;
+  useSeoTitle(currentMenu);
+
   useEffect(() => {
     if (pathname !== "" && pathname !== "home") {
       setMenuStateLoading(true);
@@ -187,7 +195,12 @@ const App = () => {
     getBanner();
   }, [bannerURL, window.location.href]);
 
-  if (authState.isLoading) return <Loading />;
+  if (authState.isLoading)
+    return (
+      <ThemeProvider theme={themeObj}>
+        <Loading />
+      </ThemeProvider>
+    );
 
   return (
     <ThemeProvider theme={themeObj}>
@@ -206,27 +219,29 @@ const App = () => {
             menuStateLoading={menuStateLoading}
           />
         )}
-        {!bannerLoading && bannerURL !== "" && (
-          <UploadButton
-            setImagePath={setImagePath}
-            uploadLoading={uploadLoading}
-            setUploadLoading={setUploadLoading}
-            uploadPath="famt/common/banner"
-            submitHandler={submitBannerHandler}
-          >
-            <Button
-              variant="outlined"
-              component="span"
-              sx={{
-                position: "absolute",
-                color: `${themeObj.palette.primary.main}`,
-                m: 1,
-              }}
+        {!bannerLoading &&
+          bannerURL !== "" &&
+          editorRole.includes(authState.role) && (
+            <UploadButton
+              setImagePath={setImagePath}
+              uploadLoading={uploadLoading}
+              setUploadLoading={setUploadLoading}
+              uploadPath="famt/common/banner"
+              submitHandler={submitBannerHandler}
             >
-              <EditIcon />
-            </Button>
-          </UploadButton>
-        )}
+              <Button
+                variant="outlined"
+                component="span"
+                sx={{
+                  position: "absolute",
+                  color: `${themeObj.palette.primary.main}`,
+                  m: 1,
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </UploadButton>
+          )}
         {!bannerLoading && bannerURL && (
           <LandingSection
             className="banner"

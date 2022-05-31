@@ -11,7 +11,7 @@ import ForgotPassword from "pages/common/User/ForgotPassword/ForgotPassword";
 import SpeakerDetail from "pages/common/SpeakerDetail/SpeakerDetail";
 
 const pathname = "asia";
-const formNo = "1247";
+const formNo = "1675";
 
 export default [
   {

@@ -13,7 +13,7 @@ const SpeakerImage = (props: speakerImageProps) => {
   return (
     <SpeakerImageContainer {...rest}>
       <img className="speaker-image" src={`${S3_URL}/${src}`} alt={alt} />
-      <div className="overlay" />
+      {/* <div className="overlay" /> */}
     </SpeakerImageContainer>
   );
 };

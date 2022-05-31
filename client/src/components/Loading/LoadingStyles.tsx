@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material";
 import styled from "styled-components";
 
 export const LoadingContainer = styled.div`

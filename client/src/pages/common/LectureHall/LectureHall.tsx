@@ -6,8 +6,6 @@ import ZoomCard from "components/ZoomCard/ZoomCard";
 import { StyledTimezoneSelect } from "components/Programs/ProgramsListContainer";
 import usePageViews from "hooks/usePageViews";
 import { calculateDurationToDate } from "utils/Date";
-import useSeoTitle from "hooks/useSeoTitle";
-import { globalData } from "utils/GlobalData";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import ComingSoon from "components/ComingSoon/ComingSoon";
 import { editorRole } from "utils/Roles";
@@ -18,9 +16,6 @@ const LectureHall = () => {
   const pathname = usePageViews();
   const authState = useAuthState();
   const { currentMenu } = useMenuStore();
-  // seo
-  const { lectureHall } = globalData.get(pathname) as Common.globalDataType;
-  useSeoTitle(lectureHall as string);
 
   // 국가에 해당하는 모든 webinars
   const [webinarList, setWebinarList] = useState<Webinar.webinarType[]>([]);

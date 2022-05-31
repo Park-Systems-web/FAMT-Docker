@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { globalData } from "utils/GlobalData";
 import usePageViews from "./usePageViews";
 
-const useSeoTitle = (title: string) => {
+const useSeoTitle = (currentMenu: Common.menuType) => {
   const pathname = usePageViews();
-  const { fullName } = globalData.get(pathname) as Common.globalDataType;
+  const fullName = pathname ? "FAMT 2022" : globalData.get(pathname).fullName;
+
   useEffect(() => {
-    document.title = title
-      ? `${title.toUpperCase()} | ${fullName}`
-      : `${fullName}`;
-  }, []);
+    document.title = currentMenu
+      ? `${currentMenu.name.toUpperCase()} | ${fullName}`
+      : fullName;
+  }, [currentMenu]);
 };
 
 export default useSeoTitle;

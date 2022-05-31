@@ -85,17 +85,21 @@ const ResetPassword = () => {
 
     setChangePasswordLoading(true);
     axios
-      .post(`${process.env.API_URL}/api/users/passwordreset`, {
-        token: authState.accessToken,
-        curPassword: isUserPasswordSet ? curPassword.value : null,
-        newPassword: password1.value,
-        nation: pathname,
-      })
+      .post(
+        `${process.env.API_URL}/api/users/passwordreset`,
+        {
+          accessToken: authState.accessToken,
+          curPassword: isUserPasswordSet ? curPassword.value : null,
+          newPassword: password1.value,
+          nation: pathname,
+        },
+        { withCredentials: true },
+      )
       .then((res) => {
         if (res.data.success) {
           setPasswordSetSuccessAlert(true);
           setTimeout(() => {
-            navigate(`/${pathname}`);
+            navigate(`/`);
           }, 1500);
         } else {
           switch (res.data.code) {

@@ -4,7 +4,6 @@ import Title from "components/Title/Title";
 import JPSpeakerCard from "components/SpeakerCard/JPSpeakerCard";
 import Link from "components/Link/LinkWithSearch";
 import YoutubeEmbed from "components/YoutubeEmbed/YoutubeEmbed";
-import useSeoTitle from "hooks/useSeoTitle";
 import usePageViews from "hooks/usePageViews";
 import { globalData } from "utils/GlobalData";
 import { useThemeDispatch } from "context/ThemeContext";
@@ -89,7 +88,6 @@ const JapanArchive = () => {
   const pathname = usePageViews();
   const { archive } = globalData.get(pathname) as Common.globalDataType;
   const [imagePadding, setImagePadding] = useState<number>(25);
-  useSeoTitle(archive as string);
   const size = useWindowSize();
 
   const dispatch = useThemeDispatch();

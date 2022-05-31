@@ -101,6 +101,12 @@ declare namespace Common {
     height?: string;
   }
 
+  interface landingSection2Type {
+    id: number;
+    title: string;
+    description: string;
+  }
+
   interface landingSection4Type {
     title?: string;
     content: string[];
