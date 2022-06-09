@@ -95,8 +95,9 @@ declare namespace Common {
   }
 
   interface sponsorType {
+    id: number;
     name: string;
-    img: string;
+    image_path: string;
     url?: string;
     height?: string;
   }

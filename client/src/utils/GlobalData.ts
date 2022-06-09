@@ -147,29 +147,7 @@ export const globalData = new Map<string, Common.globalDataType>([
         "https://www.youtube.com/playlist?list=PLH4cAUjlEqR1e5d8pUozjWfp0bkUZjLdj",
       landingSection6Videos: ["8K__qXUK6pQ", "LxzYo74X044"],
       landingSection7Title: "Supported By",
-      landingSection7Sponsors: [
-        {
-          name: "Park Systems",
-          img: `${S3_URL}/common/Park_logo.svg`,
-          url: "https://parksystems.com",
-        },
-        // {
-        //   name: "Imaging & Microscopy",
-        //   img: `${S3_URL}/eu/sponsors/imaging_microscopy_logo.png`,
-        //   url: "https://analyticalscience.wiley.com/do/10.1002/was.0004000235",
-        // },
-        // {
-        //   name: "NuNano",
-        //   img: `${S3_URL}/eu/sponsors/nunano_logo.png`,
-        //   url: "https://www.nunano.com/",
-        // },
-        // {
-        //   name: "NANOscientific",
-        //   img: `${S3_URL}/eu/sponsors/nanoscientific_logo.png`,
-        //   url: "https://nanoscientific.org/",
-        //   height: "40px",
-        // },
-      ],
+
       // resetPassword
       resetPasswordHeading: "Change a Password",
       resetPasswordCurrentLabel: "Current Password",

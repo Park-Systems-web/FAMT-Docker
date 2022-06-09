@@ -3,7 +3,7 @@ import InnerHTML from "dangerously-set-html-content";
 import useHTML from "hooks/useHTML";
 import Loading from "components/Loading/Loading";
 import usePageViews from "hooks/usePageViews";
-import { globalData } from "utils/GlobalData";
+import { globalData, S3_URL } from "utils/GlobalData";
 import LandingTitle from "components/Title/LandingTitle";
 import LandingSection from "components/Section/LandingSection";
 import {
@@ -11,6 +11,7 @@ import {
   Button,
   IconButton,
   Stack,
+  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -21,7 +22,7 @@ import SpeakerCard from "components/SpeakerCard/SpeakerCard";
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import YoutubeEmbed from "components/YoutubeEmbed/YoutubeEmbed";
 import EditIcon from "@mui/icons-material/Edit";
-
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 // import { LiveChatWidget } from "@livechat/widget-react";
 import {
   subHeadingFontSize,
@@ -31,8 +32,11 @@ import {
 } from "utils/FontSize";
 import { editorRole } from "utils/Roles";
 import { useAuthState } from "context/AuthContext";
-import QuillEditor from "components/QuillEditor/QuillEditor";
 import LandingTextEditor from "components/LandingTextEditor/LandingTextEditor";
+import CommonModal from "components/CommonModal/CommonModal";
+import useInput from "hooks/useInput";
+import SponsorForm from "pages/admin/Forms/SponsorForm";
+import useLoadingStore from "store/LoadingStore";
 import { SpeakersContainer } from "../Speakers/SpeakersStyles";
 import { LandingContainer } from "./LandingStyles";
 
@@ -82,6 +86,9 @@ const Landing = () => {
     window.open(url, "_blank");
   };
 
+  // loading
+  const { landingLoading, setLandingLoading } = useLoadingStore();
+
   // landing section
   const [landingSection2Content, setLandingSection2Content] =
     useState<Common.landingSection2Type>(null);
@@ -97,14 +104,43 @@ const Landing = () => {
     useState<string>("");
   const [landing2DescPreview, setLanding2DescPreview] =
     useState<boolean>(false);
+
+  // sponsor modal
+  const [openSponsorModal, setOpenSponsorModal] = useState<boolean>(false);
+  const [editSponsor, setEditSponsor] = useState<boolean>(false);
+  // sponsor state
+  const [sponsorList, setSponsorList] = useState<Common.sponsorType[]>([]);
+  const [selectedSponsor, setSelectedSponsor] = useState<Common.sponsorType>();
+
+  // API
   const getLandingContent = async (id: number) => {
-    const result = await axios.get(
-      `${process.env.API_URL}/api/page/common/landing/${id}?nation=${pathname}`,
-    );
-    setLandingSection2Content(result.data.result);
-    setLanding2Title(result.data.result.title);
-    setLanding2Desc(result.data.result.description);
+    setLandingLoading(true);
+    try {
+      const result = await axios.get(
+        `${process.env.API_URL}/api/page/common/landing/${id}?nation=${pathname}`,
+      );
+      setLandingSection2Content(result.data.result);
+      setLanding2Title(result.data.result.title);
+      setLanding2Desc(result.data.result.description);
+    } catch (err) {
+      alert(err);
+    } finally {
+      setLandingLoading(false);
+    }
   };
+
+  const getSponsor = async () => {
+    try {
+      const result = await axios.get(
+        `${process.env.API_URL}/api/page/common/sponsor?nation=${pathname}`,
+      );
+      setSponsorList(result.data.result);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  //
   const applyLanding2Content = async () => {
     // eslint-disable-next-line no-alert, no-restricted-globals
     if (confirm("Are you sure?")) {
@@ -117,6 +153,18 @@ const Landing = () => {
       navigate(0);
     }
   };
+  // sponsor handler
+  const addSponsorHandler = () => {
+    setSelectedSponsor(null);
+    setEditSponsor(false);
+    setOpenSponsorModal(true);
+  };
+  const editSponsorHandler = (sponsor: Common.sponsorType) => {
+    setSelectedSponsor(sponsor);
+    setEditSponsor(true);
+    setOpenSponsorModal(true);
+  };
+
   useEffect(() => {
     axios
       .get(
@@ -129,7 +177,16 @@ const Landing = () => {
         console.log(err);
       });
     getLandingContent(2);
+    getSponsor();
   }, []);
+
+  if (landingLoading) {
+    return (
+      <LandingContainer>
+        <Loading />
+      </LandingContainer>
+    );
+  }
 
   return (
     <LandingContainer>
@@ -153,7 +210,6 @@ const Landing = () => {
             alt="logo"
             style={{
               maxWidth: "600px",
-              // height: "300px",
               width: "100%",
               minWidth: "200px",
               marginBottom: "50px",
@@ -386,10 +442,16 @@ const Landing = () => {
           </SpeakersContainer>
         </LandingSection>
       )}
-      {showLandingSection7 && landingSection7Sponsors && (
+      {showLandingSection7 && (
         <LandingSection fullWidth maxWidth="1920px">
           <Stack className="layout">
-            <LandingTitle title={landingSection7Title || "Sponsored By"} />
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <LandingTitle title={landingSection7Title || "Sponsored By"} />
+            </Stack>
             <Stack
               flexWrap="wrap"
               alignItems="center"
@@ -400,32 +462,67 @@ const Landing = () => {
                 },
               }}
             >
-              {landingSection7Sponsors.map((sponsor) => (
-                <a
-                  className="hover-zoom"
-                  href={sponsor.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    pointerEvents: sponsor.url ? "inherit" : "none",
-                    position: "relative",
-                  }}
-                >
-                  <img
-                    src={sponsor.img}
-                    alt={sponsor.name}
+              {sponsorList.map((sponsor) => (
+                <Box>
+                  <a
+                    className="hover-zoom"
+                    href={sponsor.url}
+                    target="_blank"
+                    rel="noreferrer"
                     style={{
-                      maxHeight: sponsor.height ? sponsor.height : "80px",
-                      width: "100%",
+                      pointerEvents: sponsor.url ? "inherit" : "none",
+                      position: "relative",
                     }}
-                  />
-                </a>
+                  >
+                    <img
+                      src={`${S3_URL}/${sponsor.image_path}`}
+                      alt={sponsor.name}
+                      style={{
+                        maxHeight: sponsor.height ? sponsor.height : "80px",
+                        width: "100%",
+                      }}
+                    />
+                  </a>
+                  {isEditor && (
+                    <IconButton
+                      component="span"
+                      className="sponsor-edit-btn"
+                      size="small"
+                      onClick={() => {
+                        editSponsorHandler(sponsor);
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  )}
+                </Box>
               ))}
+              {isEditor && (
+                <Stack
+                  sx={{
+                    width: "110px",
+                    height: "80px",
+                  }}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <IconButton onClick={addSponsorHandler}>
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                </Stack>
+              )}
             </Stack>
           </Stack>
         </LandingSection>
       )}
-
+      {openSponsorModal && (
+        <SponsorForm
+          open={openSponsorModal}
+          setOpen={setOpenSponsorModal}
+          edit={editSponsor}
+          selectedSponsor={selectedSponsor as Common.sponsorType}
+        />
+      )}
       {/* <CookieConsent
         style={{
           flexDirection: "column",

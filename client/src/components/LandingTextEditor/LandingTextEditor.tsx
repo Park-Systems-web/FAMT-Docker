@@ -52,7 +52,6 @@ const LandingTextEditor = ({
   const theme = useTheme();
 
   const resetHandler = () => {
-    console.log(initialValue);
     setValue(initialValue);
   };
 

@@ -66,8 +66,6 @@ const UserDetailForm = ({
     }
   };
 
-  console.log(selectedUser);
-
   return (
     <CommonModal
       open={openUserDetailForm}

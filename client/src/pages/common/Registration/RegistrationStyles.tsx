@@ -125,7 +125,7 @@ export const RegistrationContainer = styled.div`
 
   .mktoButton2 {
     margin: 0 auto;
-    transition: opacity 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     &.disabled {
       opacity: 0.4;
       pointer-events: none;

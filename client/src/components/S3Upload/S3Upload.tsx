@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, { Dispatch, SetStateAction, useState } from "react";
 import S3 from "aws-sdk/clients/s3";
 import { Button, Fab } from "@mui/material";
@@ -13,6 +14,7 @@ interface S3UploadProps {
   previewURL: string;
   setPreviewURL: Dispatch<SetStateAction<string>>;
   setUploadLoading: Dispatch<SetStateAction<boolean>>;
+  uploadPath?: string;
 }
 
 export const myBucket = new S3(S3Props);
@@ -23,6 +25,7 @@ const S3Upload = ({
   previewURL = "",
   setPreviewURL,
   setUploadLoading,
+  uploadPath,
 }: S3UploadProps) => {
   const [progress, setProgress] = useState<number>(0);
 
@@ -32,7 +35,6 @@ const S3Upload = ({
   const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
-
     if (
       !(
         file.type === "image/jpeg" ||
@@ -50,15 +52,19 @@ const S3Upload = ({
   };
 
   const uploadFile = (file: File) => {
+    const pathKey = uploadPath
+      ? `upload/${pathname}/${uploadPath}/${`${
+          file.name.split(".")[0]
+        }_${Date.now()}.${file.name.split(".")[1]}`}`
+      : `upload/${pathname}/${location.pathname.split("/").slice(-1)[0]}/${`${
+          file.name.split(".")[0]
+        }_${Date.now()}.${file.name.split(".")[1]}`}`;
+
     const params = {
       ACL: "public-read",
       Body: file,
       Bucket: S3_BUCKET,
-      Key: `upload/${pathname}/${
-        location.pathname.split("/").slice(-1)[0]
-      }/${`${file.name.split(".")[0]}_${Date.now()}.${
-        file.name.split(".")[1]
-      }`}`,
+      Key: pathKey,
     };
 
     myBucket
