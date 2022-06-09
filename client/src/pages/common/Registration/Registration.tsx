@@ -148,7 +148,11 @@ const Registration = ({ formNo }: RegistrationProps) => {
     const formData =
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      window.MktoForms2.allForms()[0].getValues();
+      window.MktoForms2.allForms()[
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        window.MktoForms2.allForms().length - 1
+      ].getValues();
     // setPasswordSetModalOpen(true);
     setSubmitBlock(true);
     try {
@@ -172,8 +176,12 @@ const Registration = ({ formNo }: RegistrationProps) => {
       // marketo submit
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      window.MktoForms2.allForms()[0]
-        .submit()
+      window.MktoForms2.allForms()
+        [
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          window.MktoForms2.allForms().length - 1
+        ].submit()
         .onSuccess(() => {
           return false;
         });
@@ -186,7 +194,7 @@ const Registration = ({ formNo }: RegistrationProps) => {
         if (res.data.success) {
           dispatchLogin(formData.Email, res.data.role, res.data.accessToken);
         }
-        navigate(`/${nation}/user/reset-password`);
+        navigate(`/user/reset-password`);
       } catch (err) {
         console.log(err);
         alert("login failed");
@@ -199,16 +207,33 @@ const Registration = ({ formNo }: RegistrationProps) => {
     }
   };
 
+  // 마케토폼 2개 렌더링 될 시 refresh
+  useEffect(() => {
+    if (
+      document.querySelectorAll("#LblpsOptin").length > 2 ||
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      window.MktoForms2.allForms().length > 2
+    ) {
+      navigate(0);
+    }
+  }, [
+    document.querySelectorAll("#LblpsOptin"),
+    window.location.href,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.MktoForms2.allForms(),
+  ]);
+
   return (
     <>
       {mktoLoading && <Loading />}
       <RegistrationContainer>
-        <LandingSection className="banner" maxWidth="1920px" fullWidth>
+        {/* <LandingSection className="banner" maxWidth="1920px" fullWidth>
           <Stack justifyContent="center" alignItems="center" height="100%">
             <img className="banner-img" src={logoURL} alt="NSS Logo" />
           </Stack>
-        </LandingSection>
-
+        </LandingSection> */}
         <LandingSection className="layout">
           <Stack
             className="step-container"
@@ -263,7 +288,11 @@ const Registration = ({ formNo }: RegistrationProps) => {
                   if (
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    !window.MktoForms2.allForms()[0]?.validate()
+                    !window.MktoForms2.allForms()[
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      window.MktoForms2.allForms().length - 1
+                    ]?.validate()
                   ) {
                     // 마케토 validator가 알려줌
                   } else if (emailValid !== 1) {
