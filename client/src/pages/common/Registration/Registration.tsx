@@ -209,21 +209,13 @@ const Registration = ({ formNo }: RegistrationProps) => {
 
   // 마케토폼 2개 렌더링 될 시 refresh
   useEffect(() => {
-    if (
-      document.querySelectorAll("#LblpsOptin").length > 2 ||
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      window.MktoForms2.allForms().length > 2
-    ) {
-      navigate(0);
-    }
-  }, [
-    document.querySelectorAll("#LblpsOptin"),
-    window.location.href,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.MktoForms2.allForms(),
-  ]);
+    setTimeout(() => {
+      console.log(mktoLoading, document.querySelectorAll("#LblpsOptin"));
+      if (document.querySelectorAll("#LblpsOptin").length > 2) {
+        navigate(0);
+      }
+    }, 300);
+  }, [mktoLoading]);
 
   return (
     <>
