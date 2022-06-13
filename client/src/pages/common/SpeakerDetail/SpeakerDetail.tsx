@@ -5,6 +5,7 @@ import SpeakerImage from "components/SpeakerImage/SpeakerImage";
 import usePageViews from "hooks/usePageViews";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Link from "components/Link/LinkWithSearch";
 import {
   mainFontSize,
   smallFontSize,
@@ -13,6 +14,7 @@ import {
 import InnerHTML from "dangerously-set-html-content";
 import LandingSection from "components/Section/LandingSection";
 import { globalData } from "utils/GlobalData";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { SpeakerDetailContainer } from "./SpeakerDetailStyles";
 
 const SpeakerDetail = () => {
@@ -50,6 +52,16 @@ const SpeakerDetail = () => {
       {speakerLoading && <Loading />}
       {!speakerLoading && (
         <Stack className="layout body-fit">
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ mb: 2 }}
+          >
+            <Link to="/speakers" className="p0">
+              <ArrowBackIcon className="btn-alpha" />
+            </Link>
+          </Stack>
           <Stack
             mb={2}
             sx={{

@@ -99,7 +99,7 @@ declare namespace Common {
     name: string;
     image_path: string;
     url?: string;
-    height?: string;
+    height?: number;
   }
 
   interface landingSection2Type {

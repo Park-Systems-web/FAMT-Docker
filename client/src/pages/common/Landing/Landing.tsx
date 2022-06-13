@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InnerHTML from "dangerously-set-html-content";
 import useHTML from "hooks/useHTML";
 import Loading from "components/Loading/Loading";
@@ -33,10 +33,9 @@ import {
 import { editorRole } from "utils/Roles";
 import { useAuthState } from "context/AuthContext";
 import LandingTextEditor from "components/LandingTextEditor/LandingTextEditor";
-import CommonModal from "components/CommonModal/CommonModal";
-import useInput from "hooks/useInput";
 import SponsorForm from "pages/admin/Forms/SponsorForm";
 import useLoadingStore from "store/LoadingStore";
+import useAdminStore from "store/AdminStore";
 import { SpeakersContainer } from "../Speakers/SpeakersStyles";
 import { LandingContainer } from "./LandingStyles";
 
@@ -110,7 +109,12 @@ const Landing = () => {
   const [editSponsor, setEditSponsor] = useState<boolean>(false);
   // sponsor state
   const [sponsorList, setSponsorList] = useState<Common.sponsorType[]>([]);
+  const [previewSponsorList, setPreviewSponsorList] = useState<
+    Common.sponsorType[]
+  >([]);
   const [selectedSponsor, setSelectedSponsor] = useState<Common.sponsorType>();
+  const { isSponsorPreview, setIsSponsorPreview } = useAdminStore();
+  const sponsorModalRef = useRef<HTMLDivElement>(null);
 
   // API
   const getLandingContent = async (id: number) => {
@@ -162,6 +166,10 @@ const Landing = () => {
   const editSponsorHandler = (sponsor: Common.sponsorType) => {
     setSelectedSponsor(sponsor);
     setEditSponsor(true);
+    setOpenSponsorModal(true);
+  };
+  const handleReturnSponsor = () => {
+    setIsSponsorPreview(false);
     setOpenSponsorModal(true);
   };
 
@@ -451,6 +459,11 @@ const Landing = () => {
               justifyContent="space-between"
             >
               <LandingTitle title={landingSection7Title || "Sponsored By"} />
+              {isSponsorPreview && (
+                <Button variant="outlined" onClick={handleReturnSponsor}>
+                  Return to editor
+                </Button>
+              )}
             </Stack>
             <Stack
               flexWrap="wrap"
@@ -462,42 +475,79 @@ const Landing = () => {
                 },
               }}
             >
-              {sponsorList.map((sponsor) => (
-                <Box>
-                  <a
-                    className="hover-zoom"
-                    href={sponsor.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      pointerEvents: sponsor.url ? "inherit" : "none",
-                      position: "relative",
-                    }}
-                  >
-                    <img
-                      src={`${S3_URL}/${sponsor.image_path}`}
-                      alt={sponsor.name}
+              {isSponsorPreview &&
+                previewSponsorList.map((sponsor) => (
+                  <Box>
+                    <a
+                      className="hover-zoom"
+                      href={sponsor.url}
+                      target="_blank"
+                      rel="noreferrer"
                       style={{
-                        maxHeight: sponsor.height ? sponsor.height : "80px",
-                        width: "100%",
-                      }}
-                    />
-                  </a>
-                  {isEditor && (
-                    <IconButton
-                      component="span"
-                      className="sponsor-edit-btn"
-                      size="small"
-                      onClick={() => {
-                        editSponsorHandler(sponsor);
+                        pointerEvents: sponsor.url ? "inherit" : "none",
+                        position: "relative",
                       }}
                     >
-                      <EditIcon />
-                    </IconButton>
-                  )}
-                </Box>
-              ))}
-              {isEditor && (
+                      <img
+                        src={`${S3_URL}/${sponsor.image_path}`}
+                        alt={sponsor.name}
+                        style={{
+                          maxHeight: sponsor.height ? sponsor.height : "80px",
+                          width: "100%",
+                        }}
+                      />
+                    </a>
+                    {isEditor && !isSponsorPreview && (
+                      <IconButton
+                        component="span"
+                        className="sponsor-edit-btn"
+                        size="small"
+                        onClick={() => {
+                          editSponsorHandler(sponsor);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+                  </Box>
+                ))}
+              {!isSponsorPreview &&
+                sponsorList.map((sponsor) => (
+                  <Box>
+                    <a
+                      className="hover-zoom"
+                      href={sponsor.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        pointerEvents: sponsor.url ? "inherit" : "none",
+                        position: "relative",
+                      }}
+                    >
+                      <img
+                        src={`${S3_URL}/${sponsor.image_path}`}
+                        alt={sponsor.name}
+                        style={{
+                          maxHeight: sponsor.height ? sponsor.height : "80px",
+                          width: "100%",
+                        }}
+                      />
+                    </a>
+                    {isEditor && !isSponsorPreview && (
+                      <IconButton
+                        component="span"
+                        className="sponsor-edit-btn"
+                        size="small"
+                        onClick={() => {
+                          editSponsorHandler(sponsor);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+                  </Box>
+                ))}
+              {isEditor && !isSponsorPreview && (
                 <Stack
                   sx={{
                     width: "110px",
@@ -515,12 +565,15 @@ const Landing = () => {
           </Stack>
         </LandingSection>
       )}
-      {openSponsorModal && (
+      {(openSponsorModal || isSponsorPreview) && (
         <SponsorForm
           open={openSponsorModal}
           setOpen={setOpenSponsorModal}
           edit={editSponsor}
           selectedSponsor={selectedSponsor as Common.sponsorType}
+          className={isSponsorPreview ? "hide" : ""}
+          sponsorList={sponsorList}
+          setPreviewSponsorList={setPreviewSponsorList}
         />
       )}
       {/* <CookieConsent
