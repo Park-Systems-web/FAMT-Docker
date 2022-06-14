@@ -364,7 +364,7 @@ const Landing = () => {
         <LandingSection fullWidth maxWidth="1920px">
           <Stack className="layout" direction="column">
             {landingSection4Title && (
-              <LandingTitle title={landingSection4Title} textAlign="left" />
+              <LandingTitle title={landingSection4Title} />
             )}
             <Stack
               direction={{ mobile: "column", laptop: "row" }}
@@ -439,7 +439,7 @@ const Landing = () => {
           <SpeakersContainer className="layout">
             <Stack direction="column">
               {landingSection5Title && (
-                <LandingTitle title={landingSection5Title} textAlign="right" />
+                <LandingTitle title={landingSection5Title} />
               )}
               <Stack direction="row" flexWrap="wrap">
                 {keynoteSpeakers.map((speaker) => (
@@ -450,6 +450,58 @@ const Landing = () => {
           </SpeakersContainer>
         </LandingSection>
       )}
+
+      {/* section6 */}
+      {showLandingSection6 && (
+        <LandingSection fullWidth maxWidth="1920px">
+          <Stack className="layout">
+            <LandingTitle
+              title={
+                landingSection6Title ||
+                "The times of the NanoScientific Symposium past journey"
+              }
+            />
+            {landingSection6ButtonText && landingSection6ButtonLink && (
+              <Stack
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{
+                  margin: "-15px 0 20px 0",
+                  flexDirection: {
+                    laptop: "row",
+                  },
+                }}
+              >
+                <Box sx={{ width: { laptop: "50%" } }}>
+                  <Typography
+                    fontSize={mainFontSize}
+                    fontWeight={theme.typography.fontWeightMedium}
+                  >
+                    {landingSection6Desc || ""}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{ m: "15px", width: { mobile: "70%", laptop: "30%" } }}
+                >
+                  <NSSButton
+                    variant="gradient"
+                    style={{ margin: "0 auto" }}
+                    onClick={() => {
+                      openLink(landingSection6ButtonLink);
+                    }}
+                    fontSize={smallFontSize}
+                    fontWeight={theme.typography.fontWeightBold}
+                  >
+                    {landingSection6ButtonText}
+                  </NSSButton>
+                </Box>
+              </Stack>
+            )}
+          </Stack>
+        </LandingSection>
+      )}
+
       {showLandingSection7 && (
         <LandingSection fullWidth maxWidth="1920px">
           <Stack className="layout">

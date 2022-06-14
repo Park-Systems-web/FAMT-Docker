@@ -139,13 +139,13 @@ export const globalData = new Map<string, Common.globalDataType>([
         },
       ],
       landingSection5Title: "Featured Speakers",
-      landingSection6Title: "Watch previous editions",
+      landingSection6Title: "Past Editions",
       // landingSection6Desc:
       //   "Learn and be inspired at any time with more then 200 sessions on demand",
-      landingSection6ButtonText: "Explore all on-demand sessions",
+      landingSection6ButtonText: "Explore past editions",
       landingSection6ButtonLink:
-        "https://www.youtube.com/playlist?list=PLH4cAUjlEqR1e5d8pUozjWfp0bkUZjLdj",
-      landingSection6Videos: ["8K__qXUK6pQ", "LxzYo74X044"],
+        "https://www.youtube.com/playlist?list=PLH4cAUjlEqR0MIb3RLlVuCnxrzIdJnMck",
+      // landingSection6Videos: ["8K__qXUK6pQ", "LxzYo74X044"],
       landingSection7Title: "Supported By",
 
       // resetPassword
