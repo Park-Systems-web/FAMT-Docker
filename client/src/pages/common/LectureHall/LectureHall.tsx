@@ -46,7 +46,7 @@ const LectureHall = () => {
         // );
         // setWebinarList(upcomingWebinars);
         const upcomingWebinars = filterPreviousWebinars(
-          filterWebinarsByTag(res.data.result.webinars, pathname),
+          filterWebinarsByTag(res.data.result, pathname),
         );
         setWebinarList(upcomingWebinars);
         // setWebinarList(res.data.result.webinars);
