@@ -228,14 +228,6 @@ const LoginModal = ({
       )
       .then((res) => {
         if (res.data.success === true) {
-          console.log(res.data.refreshToken);
-          // const cookies = new Cookies();
-          // cookies.set("refreshToken", res.data.refreshToken, {
-          //   path: "/",
-          //   httpOnly: true,
-          //   sameSite: false,
-          // });
-          //
           dispatchLogin(email, res.data.role, res.data.accessToken);
           setSuccess(true);
           setPasswordInputModalOpen(false);
