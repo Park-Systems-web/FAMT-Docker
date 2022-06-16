@@ -36,6 +36,7 @@ import LandingTextEditor from "components/LandingTextEditor/LandingTextEditor";
 import SponsorForm from "pages/admin/Forms/SponsorForm";
 import useLoadingStore from "store/LoadingStore";
 import useAdminStore from "store/AdminStore";
+import LandingSection4Form from "pages/admin/Forms/LandingSection4Form";
 import { SpeakersContainer } from "../Speakers/SpeakersStyles";
 import { LandingContainer } from "./LandingStyles";
 
@@ -62,7 +63,6 @@ const Landing = () => {
     landingSection3Title,
     landingSection3Desc,
     landingSection4Title,
-    landingSection4List,
     landingSection5Title,
     landingSection6Title,
     landingSection6Desc,
@@ -103,6 +103,14 @@ const Landing = () => {
     useState<string>("");
   const [landing2DescPreview, setLanding2DescPreview] =
     useState<boolean>(false);
+  const [landingSection4List, setLandingSection4List] =
+    useState<Common.landingSection4Type[]>(null);
+  // landing4 modal
+  const [openSection4Modal, setOpenSection4Modal] = useState<boolean>(false);
+  const [editSection4, setEditSection4] = useState<boolean>(false);
+  // landing4 state
+  const [selectedSection4, setSelectedSection4] =
+    useState<Common.landingSection4Type>();
 
   // sponsor modal
   const [openSponsorModal, setOpenSponsorModal] = useState<boolean>(false);
@@ -117,15 +125,28 @@ const Landing = () => {
   const sponsorModalRef = useRef<HTMLDivElement>(null);
 
   // API
-  const getLandingContent = async (id: number) => {
+  const getLanding2Content = async () => {
     setLandingLoading(true);
     try {
       const result = await axios.get(
-        `${process.env.API_URL}/api/page/common/landing/${id}?nation=${pathname}`,
+        `${process.env.API_URL}/api/page/common/landing/2?nation=${pathname}`,
       );
-      setLandingSection2Content(result.data.result);
-      setLanding2Title(result.data.result.title);
-      setLanding2Desc(result.data.result.description);
+      setLandingSection2Content(result.data.result[0]);
+      setLanding2Title(result.data.result[0].title);
+      setLanding2Desc(result.data.result[0].description);
+    } catch (err) {
+      alert(err);
+    } finally {
+      setLandingLoading(false);
+    }
+  };
+  const getLanding4Content = async () => {
+    setLandingLoading(true);
+    try {
+      const result = await axios.get(
+        `${process.env.API_URL}/api/page/common/landing/4?nation=${pathname}`,
+      );
+      setLandingSection4List(result.data.result);
     } catch (err) {
       alert(err);
     } finally {
@@ -157,6 +178,17 @@ const Landing = () => {
       navigate(0);
     }
   };
+  // landing4 modal handler
+  const handleAddSection4 = () => {
+    setSelectedSection4(null);
+    setEditSection4(false);
+    setOpenSection4Modal(true);
+  };
+  const handleEditSection4 = (section: Common.landingSection4Type) => {
+    setSelectedSection4(section);
+    setEditSection4(true);
+    setOpenSection4Modal(true);
+  };
   // sponsor handler
   const addSponsorHandler = () => {
     setSelectedSponsor(null);
@@ -184,7 +216,8 @@ const Landing = () => {
       .catch((err) => {
         console.log(err);
       });
-    getLandingContent(2);
+    getLanding2Content();
+    getLanding4Content();
     getSponsor();
   }, []);
 
@@ -363,9 +396,20 @@ const Landing = () => {
       {showLandingSection4 && (
         <LandingSection fullWidth maxWidth="1920px">
           <Stack className="layout" direction="column">
-            {landingSection4Title && (
-              <LandingTitle title={landingSection4Title} />
-            )}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              {landingSection4Title && (
+                <LandingTitle title={landingSection4Title} />
+              )}
+              {isEditor && (
+                <IconButton onClick={handleAddSection4}>
+                  <AddCircleOutlineIcon color="primary" />
+                </IconButton>
+              )}
+            </Stack>
             <Stack
               direction={{ mobile: "column", laptop: "row" }}
               flexWrap="wrap"
@@ -374,61 +418,57 @@ const Landing = () => {
                 color: theme.palette.common.white,
               }}
             >
-              {landingSection4List?.map((list) => (
+              {landingSection4List?.map((item) => (
                 <Box
+                  component={isEditor ? "button" : "div"}
                   className="gradient-box"
                   sx={{
                     width: {
-                      laptop: `calc(90% / ${landingSection4List.length})`,
+                      laptop:
+                        landingSection4List.length > 3
+                          ? "30%"
+                          : `calc(90% / ${landingSection4List.length})`,
+                      mobile: "100%",
                     },
+                    textAlign: "inherit",
+                    textIndent: "inherit",
                     p: 3,
                     mb: { mobile: 5, laptop: 0 },
+                    li: {
+                      ml: 2,
+                    },
                   }}
-                  key={list.title}
+                  key={`box-${item.id}`}
+                  onClick={() => {
+                    if (isEditor) {
+                      setSelectedSection4(item);
+                      setEditSection4(true);
+                      setOpenSection4Modal(true);
+                    }
+                  }}
                 >
-                  {list.title && (
-                    <Typography
-                      fontSize={subHeadingFontSize}
-                      fontWeight={theme.typography.fontWeightBold}
-                    >
-                      {list.title}
+                  {item.title && (
+                    <Typography fontWeight={600} sx={{ mb: 2 }}>
+                      {item.title}
                     </Typography>
                   )}
-                  <ul style={{ marginInlineStart: "35px" }}>
-                    {list.content.map((item) => (
-                      <li style={{ marginBottom: "15px" }}>
-                        <Typography
-                          fontWeight={theme.typography.fontWeightMedium}
-                          fontSize={smallFontSize}
-                        >
-                          {item}
-                        </Typography>
-                      </li>
-                    ))}
-                  </ul>
+                  <Typography fontSize={smallFontSize}>
+                    <InnerHTML html={item.description} />
+                  </Typography>
                 </Box>
               ))}
-              {/* <Typography
-                  fontSize={subHeadingFontSize}
-                  fontWeight={theme.typography.fontWeightBold}
-                >
-                  {landingSection4List1Title}
-                </Typography>
-                <ul style={{ marginInlineStart: "35px" }}>
-                  {landingSection4List1?.map((item) => (
-                    <li style={{ marginBottom: "15px" }}>
-                      <Typography
-                        fontWeight={theme.typography.fontWeightMedium}
-                        fontSize={smallFontSize}
-                      >
-                        {item}
-                      </Typography>
-                    </li>
-                   ))} 
-                </ul> */}
             </Stack>
           </Stack>
         </LandingSection>
+      )}
+      {/* Form */}
+      {openSection4Modal && (
+        <LandingSection4Form
+          open={openSection4Modal}
+          setOpen={setOpenSection4Modal}
+          edit={editSection4}
+          selectedSection={selectedSection4}
+        />
       )}
       {/* </BackgroundVectorColored> */}
 
@@ -609,7 +649,7 @@ const Landing = () => {
                   alignItems="center"
                 >
                   <IconButton onClick={addSponsorHandler}>
-                    <AddCircleOutlineIcon />
+                    <AddCircleOutlineIcon color="primary" />
                   </IconButton>
                 </Stack>
               )}
