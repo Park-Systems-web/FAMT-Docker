@@ -64,6 +64,7 @@ declare namespace User {
   interface userType {
     id: number;
     email: string;
+    participate_method?: string;
     title?: string;
     role: string;
     last_name: string;
@@ -109,8 +110,9 @@ declare namespace Common {
   }
 
   interface landingSection4Type {
-    title?: string;
-    content: string[];
+    id: number;
+    title: string;
+    description: string;
   }
 
   interface globalDataType {
