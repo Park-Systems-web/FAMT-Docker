@@ -160,6 +160,7 @@ const Registration = ({ formNo }: RegistrationProps) => {
       const regResponse = await axios.post(
         `${process.env.API_URL}/api/users/register`,
         {
+          participateMethod: formData.psCurrentSituation,
           title: formData.Salutation,
           firstName: formData.FirstName,
           lastName: formData.LastName,
@@ -168,7 +169,6 @@ const Registration = ({ formNo }: RegistrationProps) => {
           institute: formData.Company,
           department: formData.Department,
           country: formData.Country,
-          state: formData.State,
           nation,
         },
       );
@@ -186,11 +186,17 @@ const Registration = ({ formNo }: RegistrationProps) => {
           return false;
         });
       try {
-        const res = await axios.post(`${process.env.API_URL}/api/users/login`, {
-          nation,
-          email: formData.Email,
-          password: null,
-        });
+        const res = await axios.post(
+          `${process.env.API_URL}/api/users/login`,
+          {
+            nation,
+            email: formData.Email,
+            password: null,
+          },
+          {
+            withCredentials: true,
+          },
+        );
         if (res.data.success) {
           dispatchLogin(formData.Email, res.data.role, res.data.accessToken);
         }
@@ -210,7 +216,6 @@ const Registration = ({ formNo }: RegistrationProps) => {
   // 마케토폼 2개 렌더링 될 시 refresh
   useEffect(() => {
     setTimeout(() => {
-      console.log(mktoLoading, document.querySelectorAll("#LblpsOptin"));
       if (document.querySelectorAll("#LblpsOptin").length > 2) {
         navigate(0);
       }

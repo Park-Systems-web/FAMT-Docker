@@ -158,13 +158,13 @@ const ResetPassword = () => {
   return (
     <OuterResetContainer>
       {getUserDataloading && <Loading />}
-      {!isUserPasswordSet && !getUserDataloading && (
+      {/* {!isUserPasswordSet && !getUserDataloading && (
         <LandingSection className="banner" maxWidth="1920px" fullWidth>
           <Stack justifyContent="center" alignItems="center" height="100%">
             <img className="banner-img" src={logoURL} alt="NSS Logo" />
           </Stack>
         </LandingSection>
-      )}
+      )} */}
       {!getUserDataloading && (
         <ResetPasswordContainer className="layout body-fit">
           {!isUserPasswordSet && (
