@@ -18,7 +18,7 @@ const PrivateRoute = ({ children, setEmailModalOpen }: PrivateRouteProps) => {
 
   useEffect(() => {
     if (authState.role === "guest") {
-      alert("You have to sign in first.");
+      // alert("You have to sign in first.");
       setEmailModalOpen(true);
     }
   }, []);
