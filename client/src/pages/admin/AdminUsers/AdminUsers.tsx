@@ -15,12 +15,16 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {
   Box,
+  Button,
   CircularProgress,
   IconButton,
+  Stack,
   TableFooter,
   TablePagination,
+  TextField,
 } from "@mui/material";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
+import useInput from "hooks/useInput";
 import { AdminUsersContainer } from "./AdminUsersStyles";
 import UserDetailForm from "../Forms/UserDetailForm";
 import Loading from "../../../components/Loading/Loading";
@@ -128,6 +132,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const AdminUsers = () => {
   const pathname = usePageViews();
   const [users, setUsers] = useState<User.userType[]>([]);
+  const [usersQueryResult, setUsersQueryResult] =
+    useState<User.userType[]>(null);
+  const companyQuery = useInput("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openUserDetailForm, setOpenUserDetailForm] = useState<boolean>(false);
@@ -164,6 +171,28 @@ const AdminUsers = () => {
     setLoading(false);
   };
 
+  // company로 filtering
+  const filterByCompany = (query: string) => {
+    setUsersQueryResult(
+      users.filter((u, i) => {
+        if (u.institute) {
+          return u.institute.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+        }
+        return null;
+      }),
+    );
+  };
+
+  const handleClickSearch = () => {
+    filterByCompany(companyQuery.value);
+    setPage(0);
+  };
+
+  const handleClickReset = () => {
+    setUsersQueryResult(null);
+    setPage(0);
+  };
+
   useEffect(() => {
     setLoading(true);
 
@@ -177,53 +206,116 @@ const AdminUsers = () => {
   return (
     <AdminUsersContainer>
       <AdminLayout title="Users">
+        <TextField
+          label="Search By Company"
+          variant="filled"
+          size="small"
+          sx={{ mb: 2, mr: 1 }}
+          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (e.key === "Enter") {
+              handleClickSearch();
+            }
+          }}
+          {...companyQuery}
+        />
+        <Button
+          variant="contained"
+          onClick={handleClickSearch}
+          size="small"
+          sx={{ mr: 1 }}
+        >
+          Search
+        </Button>
+        <Button variant="outlined" onClick={handleClickReset} size="small">
+          reset
+        </Button>
+
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
             <TableHead>
               <TableRow>
                 <StyledTableCell>Email </StyledTableCell>
                 <StyledTableCell align="right">name</StyledTableCell>
+                <StyledTableCell align="right">participation</StyledTableCell>
                 <StyledTableCell align="right">institute</StyledTableCell>
                 <StyledTableCell align="right">role</StyledTableCell>
                 <StyledTableCell align="right">registration </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {(rowsPerPage > 0
-                ? users.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage,
-                  )
-                : users
-              ).map((user) => (
-                <StyledTableRow
-                  key={user.id}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setOpenUserDetailForm(true);
-                  }}
-                >
-                  <StyledTableCell scope="row">{user.email}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    {user.last_name} / {user.first_name}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {user.institute}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">{user.role}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    {user.createdAt.substring(0, 10)}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+              {!usersQueryResult &&
+                (rowsPerPage > 0
+                  ? users.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage,
+                    )
+                  : users
+                ).map((user) => (
+                  <StyledTableRow
+                    key={user.id}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setOpenUserDetailForm(true);
+                    }}
+                  >
+                    <StyledTableCell scope="row">{user.email}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.first_name} {user.last_name}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.participate_method}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.institute}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">{user.role}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.createdAt.substring(0, 10)}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              {usersQueryResult &&
+                (rowsPerPage > 0
+                  ? usersQueryResult.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage,
+                    )
+                  : usersQueryResult
+                ).map((user) => (
+                  <StyledTableRow
+                    key={user.id}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setOpenUserDetailForm(true);
+                    }}
+                  >
+                    <StyledTableCell scope="row">{user.email}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.last_name} / {user.first_name}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.participate_method}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.institute}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">{user.role}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.createdAt.substring(0, 10)}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[10, 25, { label: "All", value: -1 }]}
                   colSpan={3}
-                  count={users?.length as number}
+                  count={
+                    usersQueryResult ? usersQueryResult.length : users.length
+                  }
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{

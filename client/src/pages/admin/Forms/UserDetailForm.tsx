@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 import CommonModal from "components/CommonModal/CommonModal";
 import styled from "styled-components";
@@ -9,6 +10,7 @@ import usePageViews from "hooks/usePageViews";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import { useAuthState } from "context/AuthContext";
 import { adminRole, editorOnly } from "utils/Roles";
+import { LoadingButton } from "@mui/lab";
 
 interface UserDetailFormProps {
   openUserDetailForm: boolean;
@@ -47,6 +49,8 @@ const UserDetailForm = ({
   const isAdmin = adminRole.includes(authState.role);
 
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+
   const [submitSuccessAlert, setSubmitSuccessAlert] = useState<boolean>(false);
 
   const handleSubmit = async () => {
@@ -63,6 +67,24 @@ const UserDetailForm = ({
       console.log(err);
     } finally {
       setSubmitLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (confirm("Are you sure? The action cannot be undone.")) {
+      setDeleteLoading(true);
+      try {
+        await axios.post(`${process.env.API_URL}/api/users/unregister`, {
+          nation: pathname,
+          id: selectedUser.id,
+        });
+        setOpenUserDetailForm(false);
+        getUsers();
+      } catch (err) {
+        alert(err);
+      } finally {
+        setDeleteLoading(false);
+      }
     }
   };
 
@@ -119,6 +141,26 @@ const UserDetailForm = ({
           })}
         </ul>
       </UserDetailFormContainer>
+      <LoadingButton
+        loading={deleteLoading}
+        variant="contained"
+        color="error"
+        onClick={handleDelete}
+        style={{
+          position: "absolute",
+          right: "22px",
+          top: "12px",
+        }}
+      >
+        Unregister
+      </LoadingButton>
+      <TopCenterSnackBar
+        value={submitSuccessAlert}
+        setValue={setSubmitSuccessAlert}
+        variant="filled"
+        severity="success"
+        content="User's role changed"
+      />
       <TopCenterSnackBar
         value={submitSuccessAlert}
         setValue={setSubmitSuccessAlert}
