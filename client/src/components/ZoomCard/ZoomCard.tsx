@@ -169,9 +169,7 @@ const ZoomCard = ({
           avatar={
             <PodcastsIcon
               sx={{
-                color: isOnAir
-                  ? theme.palette.primary.light
-                  : theme.palette.whitescale.alpha50,
+                color: isOnAir ? "#e60000" : theme.palette.whitescale.alpha50,
               }}
               fontSize="medium"
             />
