@@ -128,16 +128,6 @@ export const globalData = new Map<string, Common.globalDataType>([
       landingSection3Title: "Why Attend NanoScientific Symposium?",
       landingSection3Desc: ``,
       landingSection4Title: "Sessions",
-      landingSection4List: [
-        {
-          content: [
-            "Emerging Nanomaterials for Advanced Technologies",
-            "Functional Surfaces",
-            "Advances Techniques and Automation in SPM",
-            "Correlative Microscopy",
-          ],
-        },
-      ],
       landingSection5Title: "Featured Speakers",
       landingSection6Title: "Past Editions",
       // landingSection6Desc:
@@ -146,7 +136,7 @@ export const globalData = new Map<string, Common.globalDataType>([
       landingSection6ButtonLink:
         "https://www.youtube.com/playlist?list=PLH4cAUjlEqR0MIb3RLlVuCnxrzIdJnMck",
       // landingSection6Videos: ["8K__qXUK6pQ", "LxzYo74X044"],
-      landingSection7Title: "Supported By",
+      landingSection7Title: "Sponsored By",
 
       // resetPassword
       resetPasswordHeading: "Change a Password",
