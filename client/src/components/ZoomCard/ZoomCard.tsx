@@ -150,11 +150,11 @@ const ZoomCard = ({
         `${process.env.API_URL}/api/zoom/webinar/registrants?webinarId=${webinar.id}`,
       );
       setRegistrantList(res.data.result);
-      setIsWebinarRegistered(res.data.result.map((e) => Object.values(e)[0]));
-      // setJoinLink(
-      //   res.data.result.filter((e) => e.email === "mintai@kakao.com")[0]
-      //     .join_url,
-      // );
+      setIsWebinarRegistered(
+        res.data.result
+          .map((e) => Object.values(e)[0])
+          .includes(authState.email),
+      );
     } catch (error) {
       alert(error);
     } finally {
@@ -304,6 +304,9 @@ const ZoomCard = ({
                 variant="filled"
                 error={isEmail1Empty}
                 size="small"
+                InputProps={{
+                  readOnly: true,
+                }}
                 {...email1}
               />
               <TextField
