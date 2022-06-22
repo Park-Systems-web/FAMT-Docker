@@ -92,19 +92,21 @@ const LandingSection4Form = ({
         Description
       </Typography>
       <QuillEditor value={description} setValue={setDescription} />
-      <LoadingButton
-        loading={deleteLoading}
-        variant="contained"
-        color="error"
-        onClick={handleDelete}
-        style={{
-          position: "absolute",
-          right: "22px",
-          top: "12px",
-        }}
-      >
-        Delete
-      </LoadingButton>
+      {edit && (
+        <LoadingButton
+          loading={deleteLoading}
+          variant="contained"
+          color="error"
+          onClick={handleDelete}
+          style={{
+            position: "absolute",
+            right: "22px",
+            top: "12px",
+          }}
+        >
+          Delete
+        </LoadingButton>
+      )}
     </CommonModal>
   );
 };
