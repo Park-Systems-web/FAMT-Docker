@@ -78,6 +78,7 @@ const ForgotPassword = () => {
         setCorrectCode(res.data.code);
         setShowCodeInput(true);
         setEmailSentAlert(true);
+        setIsTimerStarted(false);
         setIsTimerStarted(true);
       } else {
         // alert: 이메일이 존재하지 않아요
@@ -181,7 +182,6 @@ const ForgotPassword = () => {
                 disabled={!emailValidation || isEmailVerified}
                 loading={sendHandlerLoading}
                 variant="contained"
-                color="info"
                 onClick={sendHandler}
                 size="small"
               >
@@ -210,7 +210,6 @@ const ForgotPassword = () => {
                   <LoadingButton
                     disabled={isExpired || isEmailVerified}
                     variant="contained"
-                    color="info"
                     onClick={confirmCodeHandler}
                     size="small"
                     loadingIndicator={
