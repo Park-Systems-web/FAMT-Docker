@@ -16,7 +16,7 @@ import {
 import { LoadingButton } from "@mui/lab";
 // icons
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
-import PodcastsIcon from "@mui/icons-material/Podcasts";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 
 // utils
@@ -61,12 +61,22 @@ const ZoomCard = ({
   const [openRegisterModal, setOpenRegisterModal] = useState<boolean>(false);
   // questions state
   const [questions, setQuestions] = useState<any>();
+  // registrants
+  const [registrantList, setRegistrantList] =
+    useState<Webinar.registrantType[]>(null);
+  // register 여부
+  const [isWebinarRegistered, setIsWebinarRegistered] =
+    useState<boolean>(false);
+  // 유저 별 join link
+  const [joinLink, setJoinLink] = useState<string>("");
 
   // loading
   const [getQuestionsLoading, setGetQuestionsLoading] =
     useState<boolean>(false);
   const [addRegistrantLoading, setAddRegistrantLoading] =
     useState<boolean>(false);
+  const [getRegistrantsLoading, setGetRegistrantsLoading] =
+    useState<boolean>(true);
 
   // form validation
   const isEmail1Empty = email1.value === "";
@@ -132,6 +142,26 @@ const ZoomCard = ({
       });
   };
 
+  // get registrant list handler
+  const getRegistrants = async () => {
+    setGetRegistrantsLoading(true);
+    try {
+      const res = await axios.get(
+        `${process.env.API_URL}/api/zoom/webinar/registrants?webinarId=${webinar.id}`,
+      );
+      setRegistrantList(res.data.result);
+      setIsWebinarRegistered(res.data.result.map((e) => Object.values(e)[0]));
+      // setJoinLink(
+      //   res.data.result.filter((e) => e.email === "mintai@kakao.com")[0]
+      //     .join_url,
+      // );
+    } catch (error) {
+      alert(error);
+    } finally {
+      setGetRegistrantsLoading(false);
+    }
+  };
+
   // 제출 가능 여부 check
   const checkSubmittable = () => {
     let result =
@@ -154,182 +184,195 @@ const ZoomCard = ({
     return result;
   };
 
+  useEffect(() => {
+    getRegistrants();
+  }, []);
+
   return (
     <ZoomCardContainer>
-      <Card
-        sx={{
-          display: "flex",
-          minHeight: "220px",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-        raised
-      >
-        <CardHeader
-          avatar={
-            <PodcastsIcon
-              sx={{
-                color: isOnAir ? "#e60000" : theme.palette.whitescale.alpha50,
-              }}
-              fontSize="medium"
-            />
-          }
-          title={removeTagFromTopic(webinar.topic)}
-          subheader={`${dateToLocaleString(
-            webinar.start_time,
-            timezone,
-          )} - ${calculateDurationToString(
-            webinar.start_time,
-            webinar.duration,
-            timezone,
-          )}`}
-          titleTypographyProps={{
-            color: theme.palette.primary.contrastText,
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            fontSize: theme.typography.h6.fontSize,
-          }}
-          subheaderTypographyProps={{
-            color: theme.palette.primary.contrastTextAlpha,
-          }}
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            width: "100%",
-          }}
-        />
-        {/* <span>link: {webinar.join_url}</span> */}
-        {/* <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
-          </Typography>
-        </CardContent> */}
-        <CardActions
-          sx={{ display: "flex", justifyContent: "space-between" }}
-          disableSpacing
-        >
-          <LoadingButton
-            onClick={getQuestionsHandler}
-            variant="outlined"
-            startIcon={<ContactPageRoundedIcon />}
-            loading={getQuestionsLoading}
-          >
-            Register
-          </LoadingButton>
-          <Button
-            onClick={() => {
-              window.open(webinar.join_url, "_blank");
+      {!getRegistrantsLoading && (
+        <>
+          <Card
+            sx={{
+              display: "flex",
+              minHeight: "220px",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}
-            variant="outlined"
-            endIcon={<MeetingRoomIcon />}
+            raised
           >
-            JOIN
-          </Button>
-        </CardActions>
-      </Card>
-      <CommonModal
-        open={openRegisterModal}
-        setOpen={setOpenRegisterModal}
-        title="Webinar Registration"
-        submitText="Register"
-        onSubmit={webinarRegisterHandler}
-        submitDisabled={!checkSubmittable()}
-        loading={addRegistrantLoading}
-      >
-        <Stack
-          flexWrap="wrap"
-          sx={{
-            flexDirection: {
-              mobile: "column",
-              laptop: "row",
-            },
-            ".field-wrap": {
-              width: {
-                mobile: "100%",
-                laptop: "48%",
-              },
-              mr: {
-                mobile: 0,
-                laptop: 2,
-              },
-              mb: 1,
-            },
-          }}
-        >
-          <TextField
-            className="field-wrap"
-            label="Email"
-            required
-            variant="filled"
-            error={isEmail1Empty}
-            size="small"
-            {...email1}
-          />
-          <TextField
-            className="field-wrap"
-            label="Email Confirmation"
-            required
-            error={isEmail2Empty || !isEmailConfirmed}
-            variant="filled"
-            size="small"
-            {...email2}
-          />
-          <TextField
-            className="field-wrap"
-            label="First Name"
-            required
-            error={isFirstNameEmpty}
-            variant="filled"
-            size="small"
-            {...firstName}
-          />
-          {openRegisterModal &&
-            Object.entries(questions).map((question: [string, any]) => {
-              const questionTitle = question[0];
-              const questionValue = question[1];
-              if (questionTitle === "country") {
-                return (
-                  <div className="field-wrap">
-                    <CountrySelect
-                      required={questionValue.required}
-                      question={question}
-                      questions={questions}
-                      setQuestions={setQuestions}
-                    />
-                  </div>
-                );
-              }
-              return (
-                <TextField
-                  className="field-wrap"
-                  key={questionTitle}
-                  label={snakeToPrettyString(questionTitle)}
-                  required={questionValue.required}
-                  error={
-                    questionValue.required &&
-                    questions[questionTitle].value === ""
-                  }
-                  variant="filled"
-                  size="small"
-                  value={questions[questionTitle].value}
-                  sx={{ width: "50%" }}
-                  onChange={(
-                    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-                  ) => {
-                    const {
-                      currentTarget: { value },
-                    } = event;
-                    const questionsInputCpy = { ...questions };
-                    questionsInputCpy[questionTitle].value = value;
-                    setQuestions(questionsInputCpy);
+            <CardHeader
+              avatar={
+                <VideocamIcon
+                  sx={{
+                    color: isOnAir
+                      ? "#e60000"
+                      : theme.palette.whitescale.alpha50,
                   }}
+                  fontSize="medium"
                 />
-              );
-            })}
-        </Stack>
-      </CommonModal>
+              }
+              title={removeTagFromTopic(webinar.topic)}
+              subheader={`${dateToLocaleString(
+                webinar.start_time,
+                timezone,
+              )} - ${calculateDurationToString(
+                webinar.start_time,
+                webinar.duration,
+                timezone,
+              )}`}
+              titleTypographyProps={{
+                color: theme.palette.primary.contrastText,
+                // textOverflow: "ellipsis",
+                // whiteSpace: "nowrap",
+                // overflow: "hidden",
+                fontSize: theme.typography.h6.fontSize,
+              }}
+              subheaderTypographyProps={{
+                color: theme.palette.primary.contrastTextAlpha,
+              }}
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                width: "100%",
+              }}
+            />
+
+            <CardActions
+              sx={{ display: "flex", justifyContent: "flex-end" }}
+              disableSpacing
+            >
+              {isWebinarRegistered ? (
+                <Button
+                  onClick={() => {
+                    window.open(
+                      registrantList.filter(
+                        (e) => e.email === authState.email,
+                      )[0].join_url,
+                      "_blank",
+                    );
+                  }}
+                  variant="outlined"
+                  startIcon={<MeetingRoomIcon />}
+                >
+                  JOIN
+                </Button>
+              ) : (
+                <LoadingButton
+                  onClick={getQuestionsHandler}
+                  variant="outlined"
+                  startIcon={<ContactPageRoundedIcon />}
+                  loading={getQuestionsLoading}
+                >
+                  Register
+                </LoadingButton>
+              )}
+            </CardActions>
+          </Card>
+          <CommonModal
+            open={openRegisterModal}
+            setOpen={setOpenRegisterModal}
+            title="Webinar Registration"
+            submitText="Register"
+            onSubmit={webinarRegisterHandler}
+            submitDisabled={!checkSubmittable()}
+            loading={addRegistrantLoading}
+          >
+            <Stack
+              flexWrap="wrap"
+              sx={{
+                flexDirection: {
+                  mobile: "column",
+                  laptop: "row",
+                },
+                ".field-wrap": {
+                  width: {
+                    mobile: "100%",
+                    laptop: "48%",
+                  },
+                  mr: {
+                    mobile: 0,
+                    laptop: 2,
+                  },
+                  mb: 1,
+                },
+              }}
+            >
+              <TextField
+                className="field-wrap"
+                label="Email"
+                required
+                variant="filled"
+                error={isEmail1Empty}
+                size="small"
+                {...email1}
+              />
+              <TextField
+                className="field-wrap"
+                label="Email Confirmation"
+                required
+                error={isEmail2Empty || !isEmailConfirmed}
+                variant="filled"
+                size="small"
+                {...email2}
+              />
+              <TextField
+                className="field-wrap"
+                label="First Name"
+                required
+                error={isFirstNameEmpty}
+                variant="filled"
+                size="small"
+                {...firstName}
+              />
+              {openRegisterModal &&
+                Object.entries(questions).map((question: [string, any]) => {
+                  const questionTitle = question[0];
+                  const questionValue = question[1];
+                  if (questionTitle === "country") {
+                    return (
+                      <div className="field-wrap">
+                        <CountrySelect
+                          required={questionValue.required}
+                          question={question}
+                          questions={questions}
+                          setQuestions={setQuestions}
+                        />
+                      </div>
+                    );
+                  }
+                  return (
+                    <TextField
+                      className="field-wrap"
+                      key={questionTitle}
+                      label={snakeToPrettyString(questionTitle)}
+                      required={questionValue.required}
+                      error={
+                        questionValue.required &&
+                        questions[questionTitle].value === ""
+                      }
+                      variant="filled"
+                      size="small"
+                      value={questions[questionTitle].value}
+                      sx={{ width: "50%" }}
+                      onChange={(
+                        event: FormEvent<
+                          HTMLInputElement | HTMLTextAreaElement
+                        >,
+                      ) => {
+                        const {
+                          currentTarget: { value },
+                        } = event;
+                        const questionsInputCpy = { ...questions };
+                        questionsInputCpy[questionTitle].value = value;
+                        setQuestions(questionsInputCpy);
+                      }}
+                    />
+                  );
+                })}
+            </Stack>
+          </CommonModal>
+        </>
+      )}
     </ZoomCardContainer>
   );
 };

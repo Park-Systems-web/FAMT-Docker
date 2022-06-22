@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "components/Link/LinkWithSearch";
@@ -42,8 +43,8 @@ interface navProps {
   setLogoutLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setLogoutSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   menuStateLoading: boolean;
-  // eslint-disable-next-line react/require-default-props
   hideMenu?: boolean;
+  hideLectureHall?: boolean;
 }
 
 const NavBar = ({
@@ -58,6 +59,7 @@ const NavBar = ({
   setLogoutSuccess,
   setLogoutLoading,
   menuStateLoading,
+  hideLectureHall = false,
 }: navProps) => {
   // menu list
   // const [menuList, setMenuList] = useState<menuType[]>(null);
@@ -159,18 +161,23 @@ const NavBar = ({
                 alignSelf="flex-end"
                 className="menu-item-wrap"
               >
-                {menuList.map((menu) => (
-                  <MenuLink
-                    key={menu.name}
-                    to={`${menu.path}`}
-                    // published={
-                    //   menu.is_published === 1 ||
-                    //   editorRole.includes(authState.role)
-                    // }
-                  >
-                    {menu.name.toUpperCase()}
-                  </MenuLink>
-                ))}
+                {menuList.map((menu) => {
+                  if (menu.name !== "Join Live" || !hideLectureHall) {
+                    return (
+                      <MenuLink
+                        key={menu.name}
+                        to={`${menu.path}`}
+                        // published={
+                        //   menu.is_published === 1 ||
+                        //   editorRole.includes(authState.role)
+                        // }
+                      >
+                        {menu.name.toUpperCase()}
+                      </MenuLink>
+                    );
+                  }
+                  return null;
+                })}
                 {authState.isLogin && !checkLoading && (
                   <div className="user-menu-wrap">
                     <NSSButton

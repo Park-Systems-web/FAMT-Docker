@@ -21,6 +21,7 @@ import Timer from "components/Timer/Timer";
 import { globalData } from "utils/GlobalData";
 import useInput from "hooks/useInput";
 import { smallFontSize } from "utils/FontSize";
+import { editorRole } from "utils/Roles";
 import usePageViews from "../../hooks/usePageViews";
 import { useAuthState, useAuthDispatch } from "../../context/AuthContext";
 
@@ -200,7 +201,7 @@ const LoginModal = ({
   const state = useAuthState();
   const dispatch = useAuthDispatch();
 
-  const dispatchLogin = (e: string, r: string, t: string) =>
+  const dispatchLogin = (e: string, r: string, t: string, p: string) =>
     dispatch({
       type: "LOGIN",
       authState: {
@@ -208,6 +209,7 @@ const LoginModal = ({
         isLogin: true,
         role: r,
         email: e,
+        isOnline: p === "online" || editorRole.includes(r),
         accessToken: t,
       },
     });
@@ -228,7 +230,12 @@ const LoginModal = ({
       )
       .then((res) => {
         if (res.data.success === true) {
-          dispatchLogin(email, res.data.role, res.data.accessToken);
+          dispatchLogin(
+            email,
+            res.data.role,
+            res.data.accessToken,
+            res.data.participate_method,
+          );
           setSuccess(true);
           setPasswordInputModalOpen(false);
         } else {

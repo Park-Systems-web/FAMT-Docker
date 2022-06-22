@@ -4,6 +4,7 @@ type State = {
   isLogin: boolean;
   email: string;
   role: string;
+  isOnline: boolean;
   accessToken: string;
   isPasswordSet: boolean;
   isLoading: boolean;
@@ -29,6 +30,7 @@ function reducer(state: State, action: Action): State {
         isLogin: true,
         role: action.authState.role,
         email: action.authState.email,
+        isOnline: action.authState.isOnline,
         accessToken: action.authState.accessToken,
         isPasswordSet: action.authState.isPasswordSet,
         isLoading: action.authState.isLoading,
@@ -60,6 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email: "",
     role: "guest",
     accessToken: "",
+    isOnline: false,
     isPasswordSet: false,
     isLoading: true,
   });

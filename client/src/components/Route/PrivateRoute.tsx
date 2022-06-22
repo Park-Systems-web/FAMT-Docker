@@ -36,10 +36,10 @@ const PrivateRoute = ({ children, setEmailModalOpen }: PrivateRouteProps) => {
       <NSSButton
         variant="gradient"
         onClick={() => {
-          navigate(-1);
+          navigate("/");
         }}
       >
-        Go to a previous page
+        Return to main page
       </NSSButton>
     </Box>
   );

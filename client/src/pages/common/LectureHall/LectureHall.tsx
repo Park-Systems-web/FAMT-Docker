@@ -11,11 +11,13 @@ import ComingSoon from "components/ComingSoon/ComingSoon";
 import { editorRole } from "utils/Roles";
 import { useAuthState } from "context/AuthContext";
 import useMenuStore from "store/MenuStore";
+import { useNavigate } from "react-router";
 
 const LectureHall = () => {
   const pathname = usePageViews();
   const authState = useAuthState();
   const { currentMenu } = useMenuStore();
+  const navigate = useNavigate();
 
   // 국가에 해당하는 모든 webinars
   const [webinarList, setWebinarList] = useState<Webinar.webinarType[]>([]);
@@ -92,6 +94,10 @@ const LectureHall = () => {
   };
 
   useEffect(() => {
+    if (!authState.isOnline) {
+      alert("Not registered to online participant!");
+      navigate(-1);
+    }
     getWebinars();
   }, []);
   useEffect(() => {
@@ -99,12 +105,12 @@ const LectureHall = () => {
   }, [webinarList]);
 
   return (
-    <VideoContainer className="body-fit">
+    <VideoContainer className="body-fit layout">
       <Stack
         direction="column"
         sx={{
           py: "100px",
-          mx: "auto",
+          // mx: "auto",
           maxWidth: "1080px",
           zIndex: 1,
         }}
@@ -120,37 +126,37 @@ const LectureHall = () => {
             zIndex: 1,
             mt: 2,
             ml: {
-              mobile: "auto",
-              tablet: 8,
+              // mobile: "auto",
+              // tablet: 8,
             },
             mr: {
-              mobile: "auto",
+              // mobile: "auto",
               tablet: 0,
             },
             flexDirection: {
               mobile: "column",
               tablet: "row",
             },
+            alignItems: "center",
             maxHeight: "650px",
             overflowY: "auto",
             overflowX: "hidden",
-            width: {
-              mobile: "330px",
-              tablet: "auto",
-            },
+            // width: {
+            //   mobile: "330px",
+            //   tablet: "auto",
+            // },
             flexWrap: {
               mobile: "nowrap",
               tablet: "wrap",
             },
             position: "relative",
-            left: "13px",
           }}
         >
           {/* skeleton */}
           {getWebinarLoading && (
             <>
               <Stack
-                sx={{ width: "300px", height: "220px", mr: 3 }}
+                sx={{ width: "280px", height: "220px", mr: 3 }}
                 direction="column"
                 justifyContent="space-between"
               >
@@ -165,7 +171,11 @@ const LectureHall = () => {
                 <Skeleton variant="rectangular" height={130} />
               </Stack>
               <Stack
-                sx={{ width: "300px", height: "220px", mr: 3 }}
+                sx={{
+                  width: "280px",
+                  height: "220px",
+                  mr: 3,
+                }}
                 direction="column"
                 justifyContent="space-between"
               >
@@ -180,7 +190,7 @@ const LectureHall = () => {
                 <Skeleton variant="rectangular" height={130} />
               </Stack>
               <Stack
-                sx={{ width: "300px", height: "220px" }}
+                sx={{ width: "280px", height: "220px" }}
                 direction="column"
                 justifyContent="space-between"
               >

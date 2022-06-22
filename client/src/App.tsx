@@ -55,7 +55,6 @@ const App = () => {
   const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
 
   const themeObj = theme(themeState.darkMode);
-  const jpThemeObj = jpTheme(themeState.darkMode);
   const themeDispatch = useThemeDispatch();
 
   // mode
@@ -122,7 +121,13 @@ const App = () => {
       )
       .then((res) => {
         if (res.data.success !== false) {
-          const { accessToken, email, role, isPasswordSet } = res.data.data;
+          const {
+            accessToken,
+            email,
+            role,
+            isPasswordSet,
+            participate_method,
+          } = res.data.data;
           if (accessToken !== undefined) {
             authDispatch({
               type: "LOGIN",
@@ -131,6 +136,8 @@ const App = () => {
                 isLogin: true,
                 email,
                 role,
+                isOnline:
+                  participate_method === "online" || editorRole.includes(role),
                 accessToken,
                 isPasswordSet,
                 isLoading: false,
@@ -234,6 +241,7 @@ const App = () => {
             setLogoutSuccess={setLogoutSuccess}
             setLogoutLoading={setLogoutLoading}
             menuStateLoading={menuStateLoading}
+            hideLectureHall={!authState.isOnline}
           />
         )}
         {!bannerLoading && bannerURL && editorRole.includes(authState.role) && (

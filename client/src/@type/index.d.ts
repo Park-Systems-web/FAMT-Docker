@@ -223,6 +223,10 @@ declare namespace Webinar {
     topic: string;
     type: number;
   }
+  interface registrantType {
+    email: string;
+    join_url: string;
+  }
 }
 
 declare namespace Admin {
