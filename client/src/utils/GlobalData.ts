@@ -103,7 +103,7 @@ export const globalData = new Map<string, Common.globalDataType>([
       showLandingSection1: true,
       showLandingSection2: true,
       showLandingSection3: false,
-      showLandingSection4: true,
+      showLandingSection4: false,
       showLandingSection5: true,
       showLandingSection6: true,
       showLandingSection7: true,
