@@ -88,7 +88,7 @@ const LectureHall = () => {
   ) => {
     const filtered = webinars.filter(
       (webinar: Webinar.webinarType) =>
-        webinar.topic.toLowerCase().indexOf(tag.toLowerCase()) !== -1,
+        webinar.topic.toLowerCase().indexOf(`[${tag.toLowerCase()}]`) !== -1,
     );
     return filtered;
   };
