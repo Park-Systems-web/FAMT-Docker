@@ -17,6 +17,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,body{
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 7px !important;
+}
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(0 0 0 / 28%);
+}
+
 div::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
   width: 0.4em;
@@ -66,5 +81,9 @@ code {
 /*모달 버튼*/
 .css-kpm0tx-MuiButtonBase-root-MuiButton-root {
   font-size: 16px !important;
+}
+
+#zmmtg-root {
+  display: none;
 }
 

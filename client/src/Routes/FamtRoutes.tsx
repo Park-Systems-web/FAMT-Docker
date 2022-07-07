@@ -9,6 +9,7 @@ import Registration from "pages/common/Registration/Registration";
 import ResetPassword from "pages/common/User/ResetPassword/ResetPassword";
 import ForgotPassword from "pages/common/User/ForgotPassword/ForgotPassword";
 import SpeakerDetail from "pages/common/SpeakerDetail/SpeakerDetail";
+import ZoomEmbed from "pages/common/ZoomEmbed/ZoomEmbed";
 
 const pathname = "asia";
 const formNo = "1675";
@@ -37,6 +38,11 @@ export default [
   {
     path: `/join-live`,
     element: <LectureHall />,
+    isPrivate: true,
+  },
+  {
+    path: `/join-live/:webinarId`,
+    element: <ZoomEmbed />,
     isPrivate: true,
   },
   {

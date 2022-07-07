@@ -226,6 +226,8 @@ const LectureHall = () => {
                 }
                 setSuccessAlert={setAddRegistrantSuccess}
                 setFailedAlert={setAddRegistrantFailed}
+                // setCurrentZoomSignature={setCurrentZoomSignature}
+                // setCurrentZoomWebinar={setCurrentZoomWebinar}
               />
             ))}
         </Stack>

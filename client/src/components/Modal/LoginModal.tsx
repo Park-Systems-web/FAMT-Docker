@@ -201,13 +201,20 @@ const LoginModal = ({
   const state = useAuthState();
   const dispatch = useAuthDispatch();
 
-  const dispatchLogin = (e: string, r: string, t: string, p: string) =>
+  const dispatchLogin = (
+    e: string,
+    r: string,
+    n: string,
+    t: string,
+    p: string,
+  ) =>
     dispatch({
       type: "LOGIN",
       authState: {
         ...state,
         isLogin: true,
         role: r,
+        name: n,
         email: e,
         isOnline: p === "online" || editorRole.includes(r),
         accessToken: t,
@@ -233,6 +240,7 @@ const LoginModal = ({
           dispatchLogin(
             email,
             res.data.role,
+            res.data.name,
             res.data.accessToken,
             res.data.participate_method,
           );

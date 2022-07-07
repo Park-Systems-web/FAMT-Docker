@@ -24,6 +24,7 @@
     "@types/react-router": "^5.1.18",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.21",
+    "@zoomus/websdk": "^2.5.0",
     "aws-sdk": "^2.1074.0",
     "axios": "^0.25.0",
     "dangerously-set-html-content": "^1.0.9",

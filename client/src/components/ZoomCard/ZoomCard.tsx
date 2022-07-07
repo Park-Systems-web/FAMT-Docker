@@ -18,7 +18,7 @@ import { LoadingButton } from "@mui/lab";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
-
+import LanguageIcon from "@mui/icons-material/Language";
 // utils
 import { dateToLocaleString, calculateDurationToString } from "utils/Date";
 
@@ -26,6 +26,7 @@ import CommonModal from "components/CommonModal/CommonModal";
 import useInput from "hooks/useInput";
 import { snakeToPrettyString } from "utils/String";
 import CountrySelect from "components/Input/CountrySelect";
+import { useNavigate } from "react-router";
 import { ZoomCardContainer } from "./ZoomCardStyles";
 import { useAuthState } from "../../context/AuthContext";
 
@@ -35,6 +36,8 @@ interface ZoomCardProps {
   isOnAir: boolean;
   setSuccessAlert: React.Dispatch<boolean>;
   setFailedAlert: React.Dispatch<boolean>;
+  // setCurrentZoomSignature: React.Dispatch<string>;
+  // setCurrentZoomWebinar: React.Dispatch<string>;
 }
 
 interface QuestionType {
@@ -48,9 +51,12 @@ const ZoomCard = ({
   isOnAir,
   setSuccessAlert,
   setFailedAlert,
-}: ZoomCardProps) => {
+}: // setCurrentZoomSignature,
+// setCurrentZoomWebinar,
+ZoomCardProps) => {
   const authState = useAuthState();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   // input
   const email1 = useInput(authState.email);
@@ -69,7 +75,6 @@ const ZoomCard = ({
     useState<boolean>(false);
   // 유저 별 join link
   const [joinLink, setJoinLink] = useState<string>("");
-
   // loading
   const [getQuestionsLoading, setGetQuestionsLoading] =
     useState<boolean>(false);
@@ -155,6 +160,9 @@ const ZoomCard = ({
           .map((e) => Object.values(e)[0])
           .includes(authState.email),
       );
+      setJoinLink(
+        res.data.result.filter((e) => e.email === authState.email)[0].join_url,
+      );
     } catch (error) {
       alert(error);
     } finally {
@@ -238,24 +246,38 @@ const ZoomCard = ({
             />
 
             <CardActions
-              sx={{ display: "flex", justifyContent: "flex-end" }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: {
+                  mobile: "column",
+                  desktop: "row",
+                },
+              }}
               disableSpacing
             >
               {isWebinarRegistered ? (
-                <Button
-                  onClick={() => {
-                    window.open(
-                      registrantList.filter(
-                        (e) => e.email === authState.email,
-                      )[0].join_url,
-                      "_blank",
-                    );
-                  }}
-                  variant="outlined"
-                  startIcon={<MeetingRoomIcon />}
-                >
-                  JOIN
-                </Button>
+                <>
+                  <Button
+                    onClick={() => {
+                      navigate(`${webinar.id}?tk=${joinLink.split("?tk=")[1]}`);
+                    }}
+                    variant="outlined"
+                    sx={{ marginBottom: { mobile: "5px", desktop: "0" } }}
+                    startIcon={<LanguageIcon />}
+                  >
+                    Join via Browser
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      window.open(joinLink, "_blank");
+                    }}
+                    variant="outlined"
+                    endIcon={<MeetingRoomIcon />}
+                  >
+                    JOIN via Zoom App
+                  </Button>
+                </>
               ) : (
                 <LoadingButton
                   onClick={getQuestionsHandler}

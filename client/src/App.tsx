@@ -125,6 +125,7 @@ const App = () => {
             accessToken,
             email,
             role,
+            name,
             isPasswordSet,
             participate_method,
           } = res.data.data;
@@ -134,6 +135,7 @@ const App = () => {
               authState: {
                 ...authState,
                 isLogin: true,
+                name,
                 email,
                 role,
                 isOnline:
