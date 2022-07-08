@@ -9,7 +9,7 @@ export const NavBarContainer = styled.div`
     return `3px solid ${theme.palette.background.default}`;
   }};
   z-index: 10;
-  position: sticky;
+  position: fixed;
   top: 0;
   background-color: ${() => {
     const theme = useTheme();

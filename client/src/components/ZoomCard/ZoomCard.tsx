@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-restricted-globals */
 import React, { useState, useEffect, FormEvent } from "react";
 import axios from "axios";
 // mui
@@ -12,6 +14,7 @@ import {
   useTheme,
   Icon,
   TextField,
+  IconButton,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 // icons
@@ -21,12 +24,16 @@ import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 // utils
 import { dateToLocaleString, calculateDurationToString } from "utils/Date";
+import ZoomMtgEmbedded from "@zoomus/websdk/embedded";
 
 import CommonModal from "components/CommonModal/CommonModal";
 import useInput from "hooks/useInput";
 import { snakeToPrettyString } from "utils/String";
 import CountrySelect from "components/Input/CountrySelect";
 import { useNavigate } from "react-router";
+import { editorRole } from "utils/Roles";
+import CloseIcon from "@mui/icons-material/Close";
+import usePageViews from "hooks/usePageViews";
 import { ZoomCardContainer } from "./ZoomCardStyles";
 import { useAuthState } from "../../context/AuthContext";
 
@@ -55,8 +62,10 @@ const ZoomCard = ({
 // setCurrentZoomWebinar,
 ZoomCardProps) => {
   const authState = useAuthState();
+  const pathname = usePageViews();
   const theme = useTheme();
   const navigate = useNavigate();
+  const isEditor = editorRole.includes(authState.role);
 
   // input
   const email1 = useInput(authState.email);
@@ -82,6 +91,9 @@ ZoomCardProps) => {
     useState<boolean>(false);
   const [getRegistrantsLoading, setGetRegistrantsLoading] =
     useState<boolean>(true);
+
+  // zoom signature
+  const [currentZoomSignature, setCurrentZoomSignature] = useState<string>("");
 
   // form validation
   const isEmail1Empty = email1.value === "";
@@ -160,13 +172,33 @@ ZoomCardProps) => {
           .map((e) => Object.values(e)[0])
           .includes(authState.email),
       );
-      setJoinLink(
-        res.data.result.filter((e) => e.email === authState.email)[0].join_url,
-      );
+      const registerInfo = res.data.result.filter(
+        (e) => e.email === authState.email,
+      )[0];
+      if (registerInfo) {
+        setJoinLink(
+          res.data.result.filter((e) => e.email === authState.email)[0]
+            .join_url,
+        );
+      }
     } catch (error) {
       alert(error);
     } finally {
       setGetRegistrantsLoading(false);
+    }
+  };
+
+  // 카드 삭제 handler
+  const handleRemove = async () => {
+    if (confirm("Are you sure?")) {
+      try {
+        await axios.delete(
+          `${process.env.API_URL}/api/zoom/webinar/${webinar.id}?nation=${pathname}`,
+        );
+        navigate(0);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -191,9 +223,67 @@ ZoomCardProps) => {
 
     return result;
   };
+  // zoom signature
+  const getSignature = async () => {
+    const sigResult = await axios.post(
+      `${process.env.API_URL}/api/zoom/signature`,
+      {
+        meetingNumber: webinar.id,
+        role: 0,
+      },
+    );
+    setCurrentZoomSignature(sigResult.data.signature);
+  };
+  // browser 접속 클릭 시
+  const handleBrowser = () => {
+    window.location.href = `/join-live/${webinar.id}?tk=${
+      joinLink.split("?tk=")[1]
+    }`;
+    // const client = ZoomMtgEmbedded.createClient();
+    // const meetingSDKElement = document.getElementById("meetingSDKElement");
+
+    // client
+    //   .init({
+    //     debug: true,
+    //     zoomAppRoot: meetingSDKElement,
+    //     language: "en-US",
+    //     customize: {
+    //       meetingInfo: [
+    //         "topic",
+    //         "host",
+    //         "mn",
+    //         "pwd",
+    //         "telPwd",
+    //         "invite",
+    //         "participant",
+    //         "dc",
+    //         "enctype",
+    //       ],
+    //     },
+    //   })
+    //   .then((res) => {
+    //     client
+    //       .join({
+    //         sdkKey: process.env.ZOOM_SDK_KEY,
+    //         signature: currentZoomSignature,
+    //         meetingNumber: `${webinar.id}`,
+    //         password: "",
+    //         userName: authState.name,
+    //         userEmail: authState.email,
+    //         tk: joinLink.split("?tk=")[1],
+    //       })
+    //       .catch((err) => {
+    //         alert(err.reason);
+    //       });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
 
   useEffect(() => {
     getRegistrants();
+    getSignature();
   }, []);
 
   return (
@@ -220,7 +310,8 @@ ZoomCardProps) => {
                   fontSize="medium"
                 />
               }
-              title={removeTagFromTopic(webinar.topic)}
+              // title={removeTagFromTopic(webinar.topic)}
+              title={webinar.topic}
               subheader={`${dateToLocaleString(
                 webinar.start_time,
                 timezone,
@@ -259,9 +350,10 @@ ZoomCardProps) => {
               {isWebinarRegistered ? (
                 <>
                   <Button
-                    onClick={() => {
-                      navigate(`${webinar.id}?tk=${joinLink.split("?tk=")[1]}`);
-                    }}
+                    // onClick={() => {
+                    //   navigate(`${webinar.id}?tk=${joinLink.split("?tk=")[1]}`);
+                    // }}
+                    onClick={handleBrowser}
                     variant="outlined"
                     sx={{ marginBottom: { mobile: "5px", desktop: "0" } }}
                     startIcon={<LanguageIcon />}
@@ -287,6 +379,19 @@ ZoomCardProps) => {
                 >
                   Register
                 </LoadingButton>
+              )}
+              {isEditor && (
+                <IconButton
+                  sx={{
+                    position: "absolute",
+                    top: "0px",
+                    left: "100%",
+                    transform: "translateX(-100%)",
+                  }}
+                  onClick={handleRemove}
+                >
+                  <CloseIcon />
+                </IconButton>
               )}
             </CardActions>
           </Card>

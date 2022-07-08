@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ZoomMtg } from "@zoomus/websdk";
+// import { ZoomMtg } from "@zoomus/websdk";
+import ZoomMtgEmbedded from "@zoomus/websdk/embedded";
 import { useAuthState } from "context/AuthContext";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 
@@ -11,63 +12,100 @@ const ZoomEmbed = () => {
   const [currentZoomSignature, setCurrentZoomSignature] = useState<string>("");
   const authState = useAuthState();
   const { webinarId } = useParams();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const getSignature = async () => {
-    const sigResult = await axios.post(
-      `${process.env.API_URL}/api/zoom/signature`,
-      {
-        meetingNumber: webinarId,
-        role: 0,
-      },
-    );
-    setCurrentZoomSignature(sigResult.data.signature);
+    try {
+      const sigResult = await axios.post(
+        `${process.env.API_URL}/api/zoom/signature`,
+        {
+          meetingNumber: webinarId,
+          role: 0,
+        },
+      );
+
+      setCurrentZoomSignature(sigResult.data.signature);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
-    document.getElementById("zmmtg-root").style.display = "block";
+    // document.getElementById("zmmtg-root").style.display = "block";
     getSignature();
 
     return () => {
-      document.getElementById("zmmtg-root").style.display = "none";
+      // document.getElementById("zmmtg-root").style.display = "none";
     };
   }, []);
 
   useEffect(() => {
-    ZoomMtg.setZoomJSLib("https://source.zoom.us/2.5.0/lib", "/av");
-    ZoomMtg.preLoadWasm();
-    ZoomMtg.prepareWebSDK();
-    // loads language files, also passes any error messages to the ui
-    ZoomMtg.i18n.load("en-US");
-    ZoomMtg.i18n.reload("en-US");
-    ZoomMtg.init({
-      leaveUrl: "http://localhost:8080/join-live",
-      success: (success) => {
-        console.log(success);
-        ZoomMtg.join({
-          signature: currentZoomSignature,
-          meetingNumber: webinarId,
-          userName: authState.name,
-          // sdkKey: process.env.ZOOM_SDK_KEY,
-          sdkKey: "79qww1vO4WaZ9z2QVshSHQJNOQClVbVE5X6B",
-          userEmail: authState.email,
-          passWord: "",
-          tk: searchParams.get("tk"),
-          success: (success) => {
-            console.log(success);
+    const client = ZoomMtgEmbedded.createClient();
+    const meetingSDKElement = document.getElementById("meetingSDKElement");
+    const meetingSDKChatElement = document.getElementById(
+      "meetingSDKChatElement",
+    );
+
+    try {
+      client.init({
+        // debug: true,
+        zoomAppRoot: meetingSDKElement,
+        language: "en-US",
+        customize: {
+          meetingInfo: [
+            "topic",
+            "host",
+            "mn",
+            "pwd",
+            "telPwd",
+            "participant",
+            "dc",
+            "enctype",
+          ],
+          video: {
+            popper: {
+              disableDraggable: true,
+            },
+            viewSizes: {
+              default: {
+                width: 1385,
+                height: 660,
+              },
+            },
           },
-          error: (error) => {
-            console.log(error);
+          chat: {
+            popper: {
+              anchorElement: meetingSDKChatElement,
+            },
           },
-        });
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+        },
+      });
+
+      client.join({
+        sdkKey: process.env.ZOOM_SDK_KEY,
+        signature: currentZoomSignature,
+        meetingNumber: webinarId,
+        password: "",
+        userName: authState.name,
+        userEmail: authState.email,
+        tk: searchParams.get("tk"),
+      });
+    } catch (error) {
+      console.log(error.reason);
+    }
+
+    return () => {
+      client.leaveMeeting();
+    };
   }, [currentZoomSignature]);
 
-  return <div />;
+  return (
+    <>
+      <div id="meetingSDKElement" />
+      <div id="meetingSDKChatElement" />
+    </>
+  );
 };
 
 export default ZoomEmbed;

@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 export const ZoomCardContainer = styled.div`
-  width: 450px;
+  width: 440px;
   margin-right: 20px;
   margin-bottom: 20px;
+  position: relative;
 
   .MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content {
     width: 100%;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { VideoContainer } from "components/VideoContainer/VideoContainer";
-import { Box, Button, Skeleton, Stack } from "@mui/material";
+import { Box, Button, IconButton, Skeleton, Stack } from "@mui/material";
 import ZoomCard from "components/ZoomCard/ZoomCard";
 import { StyledTimezoneSelect } from "components/Programs/ProgramsListContainer";
 import usePageViews from "hooks/usePageViews";
@@ -12,12 +12,16 @@ import { editorRole } from "utils/Roles";
 import { useAuthState } from "context/AuthContext";
 import useMenuStore from "store/MenuStore";
 import { useNavigate } from "react-router";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import WebinarForm from "pages/admin/Forms/WebinarForm";
 
 const LectureHall = () => {
   const pathname = usePageViews();
   const authState = useAuthState();
   const { currentMenu } = useMenuStore();
   const navigate = useNavigate();
+
+  const isEditor = editorRole.includes(authState.role);
 
   // 국가에 해당하는 모든 webinars
   const [webinarList, setWebinarList] = useState<Webinar.webinarType[]>([]);
@@ -34,24 +38,26 @@ const LectureHall = () => {
     useState<boolean>(false);
   const [addRegistrantFailed, setAddRegistrantFailed] =
     useState<boolean>(false);
-
+  // webinar form
+  const [openWebinarForm, setOpenWebinarForm] = useState<boolean>(false);
   // getWebinar 로딩
   const [getWebinarLoading, setGetWebinarLoading] = useState<boolean>(false);
 
   const getWebinars = async () => {
     setGetWebinarLoading(true);
     axios
-      .get(`${process.env.API_URL}/api/zoom/webinar/list`)
+      .get(`${process.env.API_URL}/api/zoom/webinar/list?nation=${pathname}`)
       .then((res) => {
         // const upcomingWebinars = filterPreviousWebinars(
         //   res.data.result.webinars,
         // );
         // setWebinarList(upcomingWebinars);
-        const upcomingWebinars = filterPreviousWebinars(
-          filterWebinarsByTag(res.data.result, pathname),
-        );
-        setWebinarList(upcomingWebinars);
+        // const upcomingWebinars = filterPreviousWebinars(
+        //   filterWebinarsByTag(res.data.result, pathname),
+        // );
+        // setWebinarList(upcomingWebinars);
         // setWebinarList(res.data.result.webinars);
+        setWebinarList(res.data.result);
       })
       .catch((err) => {
         console.log(err);
@@ -93,6 +99,10 @@ const LectureHall = () => {
     return filtered;
   };
 
+  const handleAddWebinar = () => {
+    setOpenWebinarForm(true);
+  };
+
   useEffect(() => {
     if (!authState.isOnline) {
       alert("Not registered to online participant!");
@@ -101,7 +111,7 @@ const LectureHall = () => {
     getWebinars();
   }, []);
   useEffect(() => {
-    filterLiveWebinars();
+    // filterLiveWebinars();
   }, [webinarList]);
 
   return (
@@ -230,8 +240,14 @@ const LectureHall = () => {
                 // setCurrentZoomWebinar={setCurrentZoomWebinar}
               />
             ))}
+          {!getWebinarLoading && isEditor && (
+            <IconButton onClick={handleAddWebinar}>
+              <AddCircleOutlineIcon color="primary" />
+            </IconButton>
+          )}
         </Stack>
       </Stack>
+      <WebinarForm open={openWebinarForm} setOpen={setOpenWebinarForm} />
       <TopCenterSnackBar
         value={addRegistrantSuccess}
         setValue={setAddRegistrantSuccess}

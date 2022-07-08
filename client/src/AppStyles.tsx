@@ -48,6 +48,10 @@ export const AppContainer = styled.div`
     }
   }
 
+  .content-wrap {
+    margin-top: 110px;
+  }
+
   .z0 {
     z-index: 0;
   }
@@ -102,6 +106,12 @@ export const AppContainer = styled.div`
     }
     a {
       padding: 15px 10px;
+    }
+  }
+
+  @media screen and (max-width: 1140px) {
+    .content-wrap {
+      margin-top: 70px;
     }
   }
   @media screen and (min-width: 1921px) {

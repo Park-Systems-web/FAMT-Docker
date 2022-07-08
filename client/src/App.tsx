@@ -16,7 +16,7 @@ import useMenuStore from "store/MenuStore";
 import { CatchingPokemonSharp, Edit } from "@mui/icons-material";
 import LandingSection from "components/Section/LandingSection";
 import { S3_URL } from "utils/GlobalData";
-import { Button, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import UploadButton from "components/UploadButton/UploadButton";
 import { editorRole } from "utils/Roles";
@@ -230,6 +230,8 @@ const App = () => {
 
   return (
     <ThemeProvider theme={themeObj}>
+      {/* <div id="meetingSDKElement" style="z-index: 9999; position: fixed"></div> */}
+
       <AppContainer>
         {window.location.href.indexOf("admin") === -1 && (
           <NavBar
@@ -246,49 +248,52 @@ const App = () => {
             hideLectureHall={!authState.isOnline}
           />
         )}
-        {!bannerLoading && bannerURL && editorRole.includes(authState.role) && (
-          <UploadButton
-            setImagePath={setImagePath}
-            uploadLoading={uploadLoading}
-            setUploadLoading={setUploadLoading}
-            uploadPath="famt/common/banner"
-            submitHandler={submitBannerHandler}
-          >
-            <Button
-              variant="outlined"
-              component="span"
-              sx={{
-                position: "absolute",
-                color: `${themeObj.palette.primary.main}`,
-                m: 1,
-              }}
+        <Box className="content-wrap">
+          {!bannerLoading && bannerURL && editorRole.includes(authState.role) && (
+            <UploadButton
+              setImagePath={setImagePath}
+              uploadLoading={uploadLoading}
+              setUploadLoading={setUploadLoading}
+              uploadPath="famt/common/banner"
+              submitHandler={submitBannerHandler}
             >
-              <EditIcon />
-            </Button>
-          </UploadButton>
-        )}
-        {!bannerLoading && bannerURL && (
-          <LandingSection
-            className="banner"
-            background={`${S3_URL}/${bannerURL}`}
-            maxWidth="1920px"
-            fullWidth
-          />
-        )}
-        {!bannerLoading && (
-          <Routes>
-            {/* Famt */}
-            {FamtRoutes.map((route) => {
-              return routeLoopHelper(route);
-            })}
-            {/* admin */}
-            {AdminRoutes.map((route) => {
-              return routeLoopHelper(route, true);
-            })}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        )}
-
+              <Button
+                variant="outlined"
+                component="span"
+                sx={{
+                  position: "absolute",
+                  color: `${themeObj.palette.primary.main}`,
+                  m: 1,
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </UploadButton>
+          )}
+          {!bannerLoading &&
+            bannerURL &&
+            window.location.href.split("join-live")[1].indexOf("/") === -1 && (
+              <LandingSection
+                className="banner"
+                background={`${S3_URL}/${bannerURL}`}
+                maxWidth="1920px"
+                fullWidth
+              />
+            )}
+          {!bannerLoading && (
+            <Routes>
+              {/* Famt */}
+              {FamtRoutes.map((route) => {
+                return routeLoopHelper(route);
+              })}
+              {/* admin */}
+              {AdminRoutes.map((route) => {
+                return routeLoopHelper(route, true);
+              })}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          )}
+        </Box>
         <LoginModal
           setSuccess={setLoginSuccess}
           setFailed={setLoginFailed}
