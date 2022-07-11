@@ -86,6 +86,8 @@ const LoginModal = ({
 
   // alert
   const [emailSentAlert, setEmailSentAlert] = useState<boolean>(false);
+  const [emailNotVerifiedAlert, setEmailNotVerifiedAlert] =
+    useState<boolean>(false);
   const [emailNotExistAlert, setEmailNotExistAlert] = useState<boolean>(false);
   const [timerExpiredAlert, setTimerExpiredAlert] = useState<boolean>(false);
   const [codeCorrectAlert, setCodeCorrectAlert] = useState<boolean>(false);
@@ -310,7 +312,10 @@ const LoginModal = ({
       setEmptyAlert(true);
       return;
     }
-
+    if (!isEmailVerified) {
+      setEmailNotVerifiedAlert(true);
+      return;
+    }
     setLoading(true);
     axios
       .post(`${process.env.API_URL}/api/users/passwordset`, {
@@ -605,7 +610,7 @@ const LoginModal = ({
                 variant="filled"
                 onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
                   if (e.key === "Enter") {
-                    passwordSetHandler();
+                    confirmCodeHandler();
                   }
                 }}
                 {...verificationCode}
@@ -722,6 +727,13 @@ const LoginModal = ({
           variant="filled"
           severity="error"
           content="The code is wrong. Please check again."
+        />
+        <TopCenterSnackBar
+          value={emailNotVerifiedAlert}
+          setValue={setEmailNotVerifiedAlert}
+          variant="filled"
+          severity="error"
+          content='Please enter verification code then "Confirm" button.'
         />
         <TopCenterSnackBar
           value={passwordChangeSuccessAlert}
