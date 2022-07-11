@@ -76,7 +76,6 @@ const LoginModal = ({
   const [nameNotMatchAlert, setNameNotMatchAlert] = useState<boolean>(false);
 
   // 인증번호
-  const [correctCode, setCorrectCode] = useState<string>("");
   // const [showCodeInput, setShowCodeInput] = useState<boolean>(false);
   const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
   const [sendHandlerLoading, setSendHandlerLoading] = useState<boolean>(false);
@@ -143,8 +142,8 @@ const LoginModal = ({
       );
       if (res.data.result) {
         // 인증번호 세팅
-        setCorrectCode(res.data.code);
         setEmailSentAlert(true);
+        setIsTimerStarted(false);
         setIsTimerStarted(true);
       } else {
         // alert: 이메일이 존재하지 않아요
@@ -158,14 +157,23 @@ const LoginModal = ({
   };
 
   // 인증번호 확인 버튼 handler
-  const confirmCodeHandler = () => {
-    if (correctCode === verificationCode.value) {
-      setIsEmailVerified(true);
-      setCodeCorrectAlert(true);
-      setIsExpired(true);
-    } else {
-      setIsEmailVerified(false);
-      setCodeWrongAlert(true);
+  const confirmCodeHandler = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.API_URL}/api/mail/vcode/check`,
+        { nation: pathname, email: email.value, code: verificationCode.value },
+      );
+
+      if (res.data.success) {
+        setIsEmailVerified(true);
+        setCodeCorrectAlert(true);
+        setIsExpired(true);
+      } else {
+        setIsEmailVerified(false);
+        setCodeWrongAlert(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -186,7 +194,6 @@ const LoginModal = ({
 
   // timer 만료 handler
   const timerExpiredHandler = () => {
-    setCorrectCode("");
     setIsTimerStarted(false);
     if (!isEmailVerified) setTimerExpiredAlert(true);
   };

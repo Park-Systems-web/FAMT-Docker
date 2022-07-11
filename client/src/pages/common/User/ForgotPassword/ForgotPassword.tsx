@@ -10,6 +10,7 @@ import Timer from "components/Timer/Timer";
 import TopCenterSnackBar from "components/TopCenterSnackBar/TopCenterSnackBar";
 import CircularProgress from "@mui/material/CircularProgress";
 import NSSButton from "components/Button/NSSButton";
+import { useAuthState } from "context/AuthContext";
 import { ForgotPasswordContainer } from "./ForgotPasswordStyles";
 
 const ForgotPassword = () => {
@@ -20,7 +21,6 @@ const ForgotPassword = () => {
 
   // 인증번호 확인 관련
   const code = useInput("");
-  const [correctCode, setCorrectCode] = useState<string>("");
   const [showCodeInput, setShowCodeInput] = useState<boolean>(false);
   const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
 
@@ -75,8 +75,6 @@ const ForgotPassword = () => {
       );
       if (res.data.result) {
         // 인증번호 세팅
-        setCorrectCode(res.data.code);
-        setShowCodeInput(true);
         setEmailSentAlert(true);
         setIsTimerStarted(false);
         setIsTimerStarted(true);
@@ -92,14 +90,23 @@ const ForgotPassword = () => {
   };
 
   // 인증번호 확인 버튼 handler
-  const confirmCodeHandler = () => {
-    if (correctCode === code.value) {
-      setIsEmailVerified(true);
-      setCodeCorrectAlert(true);
-      setIsExpired(true);
-    } else {
-      setIsEmailVerified(false);
-      setCodeWrongAlert(true);
+  const confirmCodeHandler = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.API_URL}/api/mail/vcode/check`,
+        { nation: pathname, email: email.value, code: code.value },
+      );
+
+      if (res.data.success) {
+        setIsEmailVerified(true);
+        setCodeCorrectAlert(true);
+        setIsExpired(true);
+      } else {
+        setIsEmailVerified(false);
+        setCodeWrongAlert(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -129,7 +136,6 @@ const ForgotPassword = () => {
 
   // timer 만료 handler
   const timerExpiredHandler = () => {
-    setCorrectCode("");
     setIsTimerStarted(false);
     if (!isEmailVerified) setTimerExpiredAlert(true);
   };
