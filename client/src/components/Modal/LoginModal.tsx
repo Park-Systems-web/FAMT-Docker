@@ -161,7 +161,11 @@ const LoginModal = ({
     try {
       const res = await axios.post(
         `${process.env.API_URL}/api/mail/vcode/check`,
-        { nation: pathname, email: email.value, code: verificationCode.value },
+        {
+          nation: pathname,
+          email: email.value.trim(),
+          code: verificationCode.value.trim(),
+        },
       );
 
       if (res.data.success) {

@@ -76,6 +76,7 @@ const ForgotPassword = () => {
       if (res.data.result) {
         // 인증번호 세팅
         setEmailSentAlert(true);
+        setShowCodeInput(true);
         setIsTimerStarted(false);
         setIsTimerStarted(true);
       } else {
@@ -94,7 +95,11 @@ const ForgotPassword = () => {
     try {
       const res = await axios.post(
         `${process.env.API_URL}/api/mail/vcode/check`,
-        { nation: pathname, email: email.value, code: code.value },
+        {
+          nation: pathname,
+          email: email.value.trim(),
+          code: code.value.trim(),
+        },
       );
 
       if (res.data.success) {
@@ -125,7 +130,7 @@ const ForgotPassword = () => {
       setPasswordChangeSuccessAlert(true);
       // 1.5초 후 홈으로.
       setTimeout(() => {
-        navigate(`/${pathname}`);
+        navigate(`/`);
       }, 1500);
     } catch (err) {
       console.log(err);
