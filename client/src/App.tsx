@@ -272,7 +272,7 @@ const App = () => {
           )}
           {!bannerLoading &&
             bannerURL &&
-            window.location.href.split("join-live")[1].indexOf("/") === -1 && (
+            window.location.href.search(/(\/join-live\/)+(\d){11}/g) === -1 && (
               <LandingSection
                 className="banner"
                 background={`${S3_URL}/${bannerURL}`}
