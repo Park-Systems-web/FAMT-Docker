@@ -160,7 +160,7 @@ const Registration = ({ formNo }: RegistrationProps) => {
       const regResponse = await axios.post(
         `${process.env.API_URL}/api/users/register`,
         {
-          participateMethod: formData.psCurrentSituation,
+          participateMethod: formData.psFamtParticipationType,
           title: formData.Salutation,
           firstName: formData.FirstName,
           lastName: formData.LastName,
