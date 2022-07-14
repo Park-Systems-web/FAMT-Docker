@@ -15,6 +15,8 @@ import {
   Icon,
   TextField,
   IconButton,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 // icons
@@ -34,6 +36,7 @@ import { useNavigate } from "react-router";
 import { editorRole } from "utils/Roles";
 import CloseIcon from "@mui/icons-material/Close";
 import usePageViews from "hooks/usePageViews";
+import Loading from "components/Loading/Loading";
 import { ZoomCardContainer } from "./ZoomCardStyles";
 import { useAuthState } from "../../context/AuthContext";
 
@@ -84,12 +87,13 @@ ZoomCardProps) => {
     useState<boolean>(false);
   // 유저 별 join link
   const [joinLink, setJoinLink] = useState<string>("");
+  const [webJoinLink, setWebJoinLink] = useState<string>("");
   // loading
   const [getQuestionsLoading, setGetQuestionsLoading] =
     useState<boolean>(false);
   const [addRegistrantLoading, setAddRegistrantLoading] =
     useState<boolean>(false);
-  const [getRegistrantsLoading, setGetRegistrantsLoading] =
+  const [getRegistrantLinkLoading, setGetRegistrantLinkLoading] =
     useState<boolean>(true);
 
   // zoom signature
@@ -160,31 +164,21 @@ ZoomCardProps) => {
   };
 
   // get registrant list handler
-  const getRegistrants = async () => {
-    setGetRegistrantsLoading(true);
+  const getRegistrantLink = async () => {
+    setGetRegistrantLinkLoading(true);
     try {
       const res = await axios.get(
-        `${process.env.API_URL}/api/zoom/webinar/registrants?webinarId=${webinar.id}`,
+        `${process.env.API_URL}/api/zoom/webinar/registrants/${webinar.id}?email=${authState.email}`,
       );
-      setRegistrantList(res.data.result);
-      setIsWebinarRegistered(
-        res.data.result
-          .map((e) => Object.values(e)[0])
-          .includes(authState.email),
-      );
-      const registerInfo = res.data.result.filter(
-        (e) => e.email === authState.email,
-      )[0];
-      if (registerInfo) {
-        setJoinLink(
-          res.data.result.filter((e) => e.email === authState.email)[0]
-            .join_url,
-        );
+      setIsWebinarRegistered(!!res.data.result);
+      if (res.data.result) {
+        setJoinLink(res.data.result);
+        setWebJoinLink(res.data.result.replace("/w/", "/wc/join/"));
       }
     } catch (error) {
       alert(error);
     } finally {
-      setGetRegistrantsLoading(false);
+      setGetRegistrantLinkLoading(false);
     }
   };
 
@@ -239,56 +233,16 @@ ZoomCardProps) => {
     window.location.href = `/join-live/${webinar.id}?tk=${
       joinLink.split("?tk=")[1]
     }`;
-    // const client = ZoomMtgEmbedded.createClient();
-    // const meetingSDKElement = document.getElementById("meetingSDKElement");
-
-    // client
-    //   .init({
-    //     debug: true,
-    //     zoomAppRoot: meetingSDKElement,
-    //     language: "en-US",
-    //     customize: {
-    //       meetingInfo: [
-    //         "topic",
-    //         "host",
-    //         "mn",
-    //         "pwd",
-    //         "telPwd",
-    //         "invite",
-    //         "participant",
-    //         "dc",
-    //         "enctype",
-    //       ],
-    //     },
-    //   })
-    //   .then((res) => {
-    //     client
-    //       .join({
-    //         sdkKey: process.env.ZOOM_SDK_KEY,
-    //         signature: currentZoomSignature,
-    //         meetingNumber: `${webinar.id}`,
-    //         password: "",
-    //         userName: authState.name,
-    //         userEmail: authState.email,
-    //         tk: joinLink.split("?tk=")[1],
-    //       })
-    //       .catch((err) => {
-    //         alert(err.reason);
-    //       });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   useEffect(() => {
-    getRegistrants();
+    getRegistrantLink();
     getSignature();
   }, []);
 
   return (
     <ZoomCardContainer>
-      {!getRegistrantsLoading && (
+      {!getRegistrantLinkLoading && (
         <>
           <Card
             sx={{
@@ -350,10 +304,9 @@ ZoomCardProps) => {
               {isWebinarRegistered ? (
                 <>
                   <Button
-                    // onClick={() => {
-                    //   navigate(`${webinar.id}?tk=${joinLink.split("?tk=")[1]}`);
-                    // }}
-                    onClick={handleBrowser}
+                    onClick={() => {
+                      window.open(webJoinLink, "_blank");
+                    }}
                     variant="outlined"
                     sx={{ marginBottom: { mobile: "5px", desktop: "0" } }}
                     startIcon={<LanguageIcon />}
@@ -502,6 +455,11 @@ ZoomCardProps) => {
             </Stack>
           </CommonModal>
         </>
+      )}
+      {getRegistrantLinkLoading && (
+        <Box sx={{ textAlign: "center" }}>
+          <CircularProgress size={15} />
+        </Box>
       )}
     </ZoomCardContainer>
   );
