@@ -48,15 +48,6 @@ const LectureHall = () => {
     axios
       .get(`${process.env.API_URL}/api/zoom/webinar/list?nation=${pathname}`)
       .then((res) => {
-        // const upcomingWebinars = filterPreviousWebinars(
-        //   res.data.result.webinars,
-        // );
-        // setWebinarList(upcomingWebinars);
-        // const upcomingWebinars = filterPreviousWebinars(
-        //   filterWebinarsByTag(res.data.result, pathname),
-        // );
-        // setWebinarList(upcomingWebinars);
-        // setWebinarList(res.data.result.webinars);
         setWebinarList(res.data.result);
       })
       .catch((err) => {

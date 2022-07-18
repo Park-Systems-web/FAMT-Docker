@@ -7,11 +7,22 @@ import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import AdminLayout from "components/AdminLayout/AdminLayout";
 import { useNavigate } from "react-router";
 import usePageViews from "hooks/usePageViews";
+import axios from "axios";
 import { AdminContainer } from "./AdminStyles";
 
 const Admin = () => {
   const navigate = useNavigate();
   const pathname = usePageViews();
+
+  // const handleGetRegistrants = async () => {
+  //   await axios.post(
+  //     `${process.env.API_URL}/api/zoom/webinar/registrants/86713732649/fetch`,
+  //     {
+  //       email: "eric.kim@parksystems.com",
+  //       nation: "famt",
+  //     },
+  //   );
+  // };
   return (
     <AdminContainer>
       <AdminLayout title={`${pathname.toUpperCase()} admin`}>
@@ -46,6 +57,13 @@ const Admin = () => {
           >
             users
           </Button>
+          {/* <Button
+            variant="contained"
+            sx={{ color: "#fff" }}
+            onClick={handleGetRegistrants}
+          >
+            getRegistrants
+          </Button> */}
         </Stack>
 
         {/* <Typography paragraph>

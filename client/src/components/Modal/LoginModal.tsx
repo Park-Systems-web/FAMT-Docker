@@ -236,8 +236,8 @@ const LoginModal = ({
 
   const loginHandler = async (email: string, password: string) => {
     setLoading(true);
-    axios
-      .post(
+    try {
+      const res = await axios.post(
         `${process.env.API_URL}/api/users/login`,
         {
           email,
@@ -247,25 +247,31 @@ const LoginModal = ({
         {
           withCredentials: true,
         },
-      )
-      .then((res) => {
-        if (res.data.success === true) {
-          dispatchLogin(
-            email,
-            res.data.role,
-            res.data.name,
-            res.data.accessToken,
-            res.data.participate_method,
-          );
-          setSuccess(true);
-          setPasswordInputModalOpen(false);
-        } else {
-          setFailed(true);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      );
+      if (res.data.success === true) {
+        dispatchLogin(
+          email,
+          res.data.role,
+          res.data.name,
+          res.data.accessToken,
+          res.data.participate_method,
+        );
+      }
+
+      await axios.post(
+        `${process.env.API_URL}/api/zoom/webinar/registrant/fetch`,
+        {
+          email,
+          nation: pathname,
+        },
+      );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setSuccess(true);
+      setPasswordInputModalOpen(false);
+      setLoading(false);
+    }
   };
 
   const nextHandler = () => {

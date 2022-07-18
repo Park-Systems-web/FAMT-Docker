@@ -149,11 +149,13 @@ ZoomCardProps) => {
         `${process.env.API_URL}/api/zoom/webinar/registrants/${webinar.id}`,
         {
           questions: questionsCpy,
+          nation: pathname,
         },
       )
       .then(() => {
         setSuccessAlert(true);
         setOpenRegisterModal(false);
+        navigate(0);
       })
       .catch(() => {
         setFailedAlert(true);
@@ -168,7 +170,7 @@ ZoomCardProps) => {
     setGetRegistrantLinkLoading(true);
     try {
       const res = await axios.get(
-        `${process.env.API_URL}/api/zoom/webinar/registrants/${webinar.id}?email=${authState.email}`,
+        `${process.env.API_URL}/api/zoom/webinar/registrants/${webinar.id}?email=${authState.email}&nation=${pathname}`,
       );
       setIsWebinarRegistered(!!res.data.result);
       if (res.data.result) {
@@ -237,7 +239,7 @@ ZoomCardProps) => {
 
   useEffect(() => {
     getRegistrantLink();
-    getSignature();
+    // getSignature();
   }, []);
 
   return (
