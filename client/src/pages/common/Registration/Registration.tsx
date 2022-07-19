@@ -186,6 +186,14 @@ const Registration = ({ formNo }: RegistrationProps) => {
           return false;
         });
       try {
+        await axios.post(
+          `${process.env.API_URL}/api/zoom/webinar/registrant/fetch`,
+          {
+            email: formData.Email,
+            nation: pathname,
+          },
+        );
+
         const res = await axios.post(
           `${process.env.API_URL}/api/users/login`,
           {
