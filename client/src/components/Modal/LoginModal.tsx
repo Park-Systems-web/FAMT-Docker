@@ -237,6 +237,14 @@ const LoginModal = ({
   const loginHandler = async (email: string, password: string) => {
     setLoading(true);
     try {
+      await axios.post(
+        `${process.env.API_URL}/api/zoom/webinar/registrant/fetch`,
+        {
+          email,
+          nation: pathname,
+        },
+      );
+
       const res = await axios.post(
         `${process.env.API_URL}/api/users/login`,
         {
@@ -257,14 +265,6 @@ const LoginModal = ({
           res.data.participate_method,
         );
       }
-
-      await axios.post(
-        `${process.env.API_URL}/api/zoom/webinar/registrant/fetch`,
-        {
-          email,
-          nation: pathname,
-        },
-      );
     } catch (err) {
       console.log(err);
     } finally {
