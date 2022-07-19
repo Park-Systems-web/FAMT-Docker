@@ -230,16 +230,9 @@ ZoomCardProps) => {
     );
     setCurrentZoomSignature(sigResult.data.signature);
   };
-  // browser 접속 클릭 시
-  const handleBrowser = () => {
-    window.location.href = `/join-live/${webinar.id}?tk=${
-      joinLink.split("?tk=")[1]
-    }`;
-  };
 
   useEffect(() => {
     getRegistrantLink();
-    // getSignature();
   }, []);
 
   return (
