@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { VideoContainer } from "components/VideoContainer/VideoContainer";
-import { Box, Button, IconButton, Skeleton, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Skeleton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import ZoomCard from "components/ZoomCard/ZoomCard";
 import { StyledTimezoneSelect } from "components/Programs/ProgramsListContainer";
 import usePageViews from "hooks/usePageViews";
@@ -14,12 +22,14 @@ import useMenuStore from "store/MenuStore";
 import { useNavigate } from "react-router";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import WebinarForm from "pages/admin/Forms/WebinarForm";
+import { smallFontSize } from "utils/FontSize";
 
 const LectureHall = () => {
   const pathname = usePageViews();
   const authState = useAuthState();
   const { currentMenu } = useMenuStore();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const isEditor = editorRole.includes(authState.role);
 
@@ -116,6 +126,17 @@ const LectureHall = () => {
           zIndex: 1,
         }}
       >
+        <Typography
+          sx={{
+            textAlign: "center",
+            color: theme.palette.grey[600],
+            fontSize: smallFontSize,
+            mb: 2,
+          }}
+        >
+          Having problems with joining the zoom webinar, please contact
+          FAMT@parksystems.com
+        </Typography>
         <StyledTimezoneSelect
           value={selectedTimezone}
           onChange={(e) => {

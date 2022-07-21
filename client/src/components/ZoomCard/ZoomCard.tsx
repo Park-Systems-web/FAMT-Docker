@@ -259,7 +259,6 @@ ZoomCardProps) => {
                   fontSize="medium"
                 />
               }
-              // title={removeTagFromTopic(webinar.topic)}
               title={webinar.topic}
               subheader={`${dateToLocaleString(
                 webinar.start_time,
