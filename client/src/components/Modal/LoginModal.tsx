@@ -264,12 +264,14 @@ const LoginModal = ({
           res.data.accessToken,
           res.data.participate_method,
         );
+        setSuccess(true);
+        setPasswordInputModalOpen(false);
+      } else {
+        setPasswordNotMatchAlert(true);
       }
     } catch (err) {
       console.log(err);
     } finally {
-      setSuccess(true);
-      setPasswordInputModalOpen(false);
       setLoading(false);
     }
   };
